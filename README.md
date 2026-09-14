@@ -24,3 +24,12 @@ Check the data loads and every record lands on one sampling grid:
 Four 1 hp records to begin with - healthy, outer race, inner race, ball, all
 0.007 in faults. See `data/FILES.md` for ids, conditions, sources, and the two
 corrections the baseline file needs.
+
+## Running the notebooks
+
+Double-click `start_jupyter.bat`, or from a shell in this directory:
+
+    python -m jupyter lab --IdentityProvider.token=bearing
+
+Then open <http://localhost:8888/lab?token=bearing>. The command does not
+return - it is a server, and the terminal stays occupied until you stop it.
