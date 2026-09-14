@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# CWRU records: fetched with src/download_data.py, catalogued in data/FILES.md
+data/*.mat
