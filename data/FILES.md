@@ -52,6 +52,39 @@ the 6205-2RS JEM drive-end bearing. At 1772 rpm, n = 29.53 Hz.
 | BSF, ball | 4.7135 | 139.2 |
 | FTF, cage | 0.39828 | 11.8 |
 
+## Fault severity series, 1 hp
+
+The same three fault locations at the two larger machined diameters, added to
+test whether the time-domain statistics of step 02 survive a change of fault
+size. They do not - see below.
+
+| Local file | CWRU id | Condition |
+|---|---|---|
+| `OR014at6_1_198.mat` | 198 | outer race, 0.014 in, @6:00 |
+| `OR021at6_1_235.mat` | 235 | outer race, 0.021 in, @6:00 |
+| `IR014_1_170.mat` | 170 | inner race, 0.014 in |
+| `IR021_1_210.mat` | 210 | inner race, 0.021 in |
+| `B014_1_186.mat` | 186 | ball, 0.014 in |
+| `B021_1_223.mat` | 223 | ball, 0.021 in |
+
+Whole-record kurtosis (Pearson convention) over all ten records, sorted:
+
+    22.08  inner 0.014      7.59  outer 0.007
+    21.97  outer 0.021      5.54  inner 0.007
+     9.41  ball  0.021      2.98  HEALTHY
+     8.84  ball  0.014      2.96  ball  0.007
+     7.67  inner 0.021      2.94  outer 0.014
+
+The classes interleave completely. Outer race spans 2.94 to 21.97, inner race
+5.54 to 22.08, ball 2.96 to 9.41. The outer-race 0.014 in record is the worst
+case: kurtosis 2.94 against the healthy record's 2.98, and RMS 0.094 against
+0.062 - a real fault that reads as healthy on two of the three statistics.
+
+A threshold fitted to the 0.007 in records therefore does not survive a change
+of fault size, let alone a change of machine. This is the evidence behind the
+claim that time-domain statistics identify a condition by lookup rather than
+by measurement.
+
 ## Still to download, for step 07 only
 
 The classifier needs 3 fault types x 3 diameters (0.007/0.014/0.021 in) x

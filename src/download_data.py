@@ -24,6 +24,18 @@ STARTER = {
     "B007_1hp_119.mat": 119,       # B007_1,      ball
 }
 
+# Same three faults at 0.014 and 0.021 in, all 1 hp. Used to test whether a
+# rule fitted to the 0.007 in records survives a change of fault size - it
+# does not, which is the point of having them.
+SEVERITY = {
+    "OR014at6_1_198.mat": 198,
+    "OR021at6_1_235.mat": 235,
+    "IR014_1_170.mat": 170,
+    "IR021_1_210.mat": 210,
+    "B014_1_186.mat": 186,
+    "B021_1_223.mat": 223,
+}
+
 DATA = Path(__file__).parent.parent / "data"
 
 
@@ -54,6 +66,6 @@ def fetch(name: str, file_id: int, dest: Path, attempts: int = 4) -> None:
 if __name__ == "__main__":
     DATA.mkdir(exist_ok=True)
     print(f"into {DATA}")
-    for name, file_id in STARTER.items():
+    for name, file_id in {**STARTER, **SEVERITY}.items():
         fetch(name, file_id, DATA)
     print("\ndone - now run: python src/verify_data.py")
