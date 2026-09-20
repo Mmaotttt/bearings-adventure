@@ -1,0 +1,17 @@
+Envelope spectrum, peak-to-background ratio
+Band 2000-4000 Hz, 4th-order Butterworth, zero phase, 120976 samples at 12000 Hz
+
+                    BPFO      BPFI       BSF    own fault
+------------------------------------------------------------
+Healthy              4.3       9.7       2.2    BPFO
+Outer race         635.4      10.5      28.2    BPFO
+Inner race           2.9     236.9       4.1    BPFI
+Ball                10.2      11.5       2.1    BSF
+
+The healthy row is the false-alarm floor.
+Harmonics of BPFO in the outer-race record:
+  1 x BPFO =  105.9 Hz  ratio   635.4
+  2 x BPFO =  211.9 Hz  ratio   608.9
+  3 x BPFO =  317.8 Hz  ratio   366.3
+  4 x BPFO =  423.7 Hz  ratio   265.7
+  5 x BPFO =  529.7 Hz  ratio   509.9

@@ -9,6 +9,8 @@ and ball faults by the frequency at which a rolling element strikes the defect.
     notebooks/  exploratory work, one notebook per stage
     figures/    exported PNGs for the report
     src/        the functions the notebooks settle on
+                  cwru_io.py   loading records, fault frequencies
+                  envelope.py  envelope analysis, band selection
     report.pdf  the write-up (not written yet)
 
 ## Setup

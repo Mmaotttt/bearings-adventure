@@ -1,0 +1,11 @@
+Peak-to-background ratio in the spectrum of the 2000-4000 Hz band energy
+STFT: 64-sample Hann window, hop 8 (1500 Hz frame rate)
+
+                    BPFO      BPFI       BSF
+----------------------------------------------
+Healthy              3.6       7.2       2.3
+Outer race         601.0       9.5      30.2
+Inner race           3.3     221.8       3.6
+Ball                10.7      10.5       2.3
+
+The healthy record sets the false-alarm floor for this metric.
