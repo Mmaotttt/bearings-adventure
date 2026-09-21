@@ -516,9 +516,12 @@ measuring a frequency that geometry predicts does.
 
 ### 9.1 Repository
 
-**There is no remote yet.** The repository is local only - `git remote -v` is
-empty. Before the report is submitted, push it to GitHub and put the URL here.
-Until then the report should say `[REPOSITORY URL]` rather than invent one.
+<https://github.com/Mmaotttt/bearings-adventure>
+
+Public, default branch `main`. The records themselves are not in it; they are
+fetched by `src/download_data.py` and catalogued in `src/dataset.py`, so the
+repository is about five megabytes and anyone can reproduce every figure from
+it.
 
 Suggested one-line description of the layout:
 
