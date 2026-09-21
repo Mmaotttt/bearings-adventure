@@ -21,6 +21,7 @@ rate:
     the load table on the CWRU site instead.
 """
 
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -79,7 +80,44 @@ def _find(mat: dict, suffix: str) -> list[str]:
     return sorted(k for k in mat if not k.startswith("__") and k.endswith(suffix))
 
 
-def load(path, name=None, fs=FS, default_rpm=None, decimate_to=None) -> Signal:
+def _id_from_name(path: Path):
+    """The CWRU file id, taken from the trailing number in the filename."""
+    m = re.search(r"(\d+)$", path.stem)
+    return int(m.group(1)) if m else None
+
+
+def _select(mat: dict, suffix: str, path: Path, cwru_id=None):
+    """Pick the one variable of this kind that belongs to *this* record.
+
+    Normally a file holds a single channel of each kind. File 99 does not: it
+    carries X099_DE_time and also a complete copy of X098_DE_time, byte for
+    byte identical to file 98's. Taking the first key alphabetically hands
+    back file 98's data under file 99's name - two records that are the same
+    samples wearing different labels, which is exactly the leak that makes a
+    classifier look better than it is.
+
+    So when the file id is known, the variable carrying that id wins.
+    """
+    keys = _find(mat, suffix)
+    if not keys:
+        return None
+    if len(keys) == 1:
+        return keys[0]
+
+    if cwru_id is None:
+        cwru_id = _id_from_name(path)
+    if cwru_id is not None:
+        exact = [k for k in keys if k.startswith(f"X{cwru_id:03d}")]
+        if len(exact) == 1:
+            return exact[0]
+
+    raise KeyError(
+        f"{path.name}: {len(keys)} candidates for *{suffix} ({keys}) and no "
+        f"file id to choose between them - pass cwru_id explicitly")
+
+
+def load(path, name=None, fs=FS, default_rpm=None, decimate_to=None,
+         cwru_id=None) -> Signal:
     """Read the drive-end channel out of a CWRU .mat file.
 
     The RPM is taken from the file itself when present: the four load
@@ -93,15 +131,14 @@ def load(path, name=None, fs=FS, default_rpm=None, decimate_to=None) -> Signal:
     path = Path(path)
     mat = loadmat(path)
 
-    de_keys = _find(mat, "DE_time")
-    if not de_keys:
+    key = _select(mat, "DE_time", path, cwru_id)
+    if key is None:
         raise KeyError(f"{path.name}: no *DE_time variable, found {_find(mat, '')}")
-    key = de_keys[0]
     x = np.asarray(mat[key]).ravel().astype(np.float64)
 
-    rpm_keys = _find(mat, "RPM")
-    if rpm_keys:
-        rpm = float(np.asarray(mat[rpm_keys[0]]).ravel()[0])
+    rpm_key = _select(mat, "RPM", path, cwru_id)
+    if rpm_key:
+        rpm = float(np.asarray(mat[rpm_key]).ravel()[0])
     elif default_rpm is not None:
         rpm = float(default_rpm)
     else:
@@ -117,10 +154,18 @@ def load(path, name=None, fs=FS, default_rpm=None, decimate_to=None) -> Signal:
     return Signal(name=name or path.stem, path=path, x=x, fs=fs, rpm=rpm, key=key)
 
 
-def load_baseline(path, name=None, load_hp=1, decimate_to=FS) -> Signal:
-    """Read a normal baseline file, correcting for both of its quirks."""
+def load_baseline(path, name=None, load_hp=1, decimate_to=FS, cwru_id=None) -> Signal:
+    """Read a normal baseline file, correcting for its quirks.
+
+    Besides the 48 kHz rate and the missing RPM, note that these four records
+    are not all the same length: file 97 runs 5.08 s where the others run
+    about 10. The rate is not in question - six machine lines land where a
+    known 12 kHz record puts them only when 97 is read as 48 kHz - it is
+    simply a shorter recording.
+    """
     return load(path, name=name, fs=FS_BASELINE,
-                default_rpm=RPM_BY_LOAD[load_hp], decimate_to=decimate_to)
+                default_rpm=RPM_BY_LOAD[load_hp], decimate_to=decimate_to,
+                cwru_id=cwru_id)
 
 
 def channels(path) -> dict[str, int]:

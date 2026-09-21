@@ -1,71 +1,60 @@
 """Fetch the CWRU records this project uses.
 
+    python src/download_data.py            # everything in the catalogue
+    python src/download_data.py --starter  # just the four 1 hp records
+
 The .mat files are not kept in the repository - they are a few megabytes each
-and belong to the Bearing Data Center, not to us. This script pulls them back.
+and belong to the Bearing Data Center, not to us. `src/dataset.py` says what
+each one is; this script brings them back.
 
-    python src/download_data.py
-
-File ids come from the tables at
-<https://engineering.case.edu/bearingdatacenter/download-data-file>; the
-condition each id corresponds to is recorded in data/FILES.md.
+Ids come from the tables at
+<https://engineering.case.edu/bearingdatacenter/download-data-file>.
 """
 
 import sys
 import urllib.request
 from pathlib import Path
 
-BASE = "https://engineering.case.edu/sites/default/files/{id}.mat"
+sys.path.insert(0, str(Path(__file__).parent))
+import dataset
 
-# local name -> CWRU file id
-STARTER = {
-    "normal_1hp_98.mat": 98,       # Normal_1,    healthy baseline
-    "OR007at6_1hp_131.mat": 131,   # OR007@6_1,   outer race
-    "IR007_1hp_106.mat": 106,      # IR007_1,     inner race
-    "B007_1hp_119.mat": 119,       # B007_1,      ball
-}
-
-# Same three faults at 0.014 and 0.021 in, all 1 hp. Used to test whether a
-# rule fitted to the 0.007 in records survives a change of fault size - it
-# does not, which is the point of having them.
-SEVERITY = {
-    "OR014at6_1_198.mat": 198,
-    "OR021at6_1_235.mat": 235,
-    "IR014_1_170.mat": 170,
-    "IR021_1_210.mat": 210,
-    "B014_1_186.mat": 186,
-    "B021_1_223.mat": 223,
-}
-
+URL = "https://engineering.case.edu/sites/default/files/{id}.mat"
 DATA = Path(__file__).parent.parent / "data"
 
+# The records notebooks 01-05 need. Everything else exists for step 07.
+STARTER_CODES = ("normal", "OR007at6", "IR007", "B007")
 
-def fetch(name: str, file_id: int, dest: Path, attempts: int = 4) -> None:
+
+def fetch(record, dest, attempts=4):
     """Download one record, skipping it if a plausible copy is already there."""
-    out = dest / name
+    out = dest / record.filename
     if out.exists() and out.stat().st_size > 100_000:
-        print(f"  have  {name}  ({out.stat().st_size:,} bytes)")
-        return
+        return False
 
-    url = BASE.format(id=file_id)
+    url = URL.format(id=record.cwru_id)
+    body = None
     for attempt in range(1, attempts + 1):
         try:
-            with urllib.request.urlopen(url, timeout=120) as r:
+            with urllib.request.urlopen(url, timeout=180) as r:
                 body = r.read()
             break
-        except Exception as exc:  # the host drops connections fairly often
+        except Exception as exc:          # the host drops connections often
             if attempt == attempts:
-                raise
-            print(f"  retry {name}  ({exc})")
-    else:  # pragma: no cover
-        return
-
+                raise RuntimeError(f"{record.filename}: {exc}") from exc
+            print(f"    retry {attempt}  {record.filename}  ({exc})")
     out.write_bytes(body)
-    print(f"  got   {name}  ({len(body):,} bytes)")
+    print(f"  got   {record.filename:<26} {len(body):>10,} bytes")
+    return True
 
 
 if __name__ == "__main__":
+    starter = "--starter" in sys.argv
+    records = (dataset.catalogue(loads=(1,), codes=STARTER_CODES) if starter
+               else dataset.catalogue())
+
     DATA.mkdir(exist_ok=True)
-    print(f"into {DATA}")
-    for name, file_id in {**STARTER, **SEVERITY}.items():
-        fetch(name, file_id, DATA)
-    print("\ndone - now run: python src/verify_data.py")
+    print(f"{len(records)} records into {DATA}\n")
+
+    got = sum(fetch(r, DATA) for r in records)
+    print(f"\ndownloaded {got}, already had {len(records) - got}")
+    print("now run: python src/verify_data.py")

@@ -1,21 +1,38 @@
 # Dataset manifest
 
 All records: Case Western Reserve University Bearing Data Center, drive-end
-accelerometer (`DE`), motor load 1 hp. Test bearing at the drive end is an
-SKF 6205-2RS JEM deep-groove ball bearing. Faults are single points put in by
-electro-discharge machining, 0.007 in diameter.
+accelerometer (`DE`). The test bearing at the drive end is an SKF 6205-2RS JEM
+deep-groove ball bearing. Faults are single points put in by electro-discharge
+machining at 0.007, 0.014 and 0.021 in diameter.
 
 Source pages consulted 2026-09-14:
 <https://engineering.case.edu/bearingdatacenter/download-data-file>,
 <https://engineering.case.edu/bearingdatacenter/apparatus-and-procedures>,
 <https://engineering.case.edu/bearingdatacenter/bearing-information>
 
-| Local file | CWRU id | Condition | Table | Native fs | rpm | rpm source |
-|---|---|---|---|---|---|---|
-| `normal_1hp_98.mat` | 98 / `Normal_1` | healthy baseline | Normal Baseline Data | 48 kHz | 1772 | load table |
-| `OR007at6_1hp_131.mat` | 131 / `OR007@6_1` | outer race, 0.007 in, fault centred @6:00 | 12k Drive End | 12 kHz | 1773 | `X131RPM` |
-| `IR007_1hp_106.mat` | 106 / `IR007_1` | inner race, 0.007 in | 12k Drive End | 12 kHz | 1772 | `X106RPM` |
-| `B007_1hp_119.mat` | 119 / `B007_1` | ball, 0.007 in | 12k Drive End | 12 kHz | 1772 | `X119RPM` |
+The full catalogue is `src/dataset.py`; `python src/download_data.py` fetches
+all of it, and `--starter` fetches only the four records notebooks 01-05 need.
+
+Local files are named `<code>_<load>hp_<cwru id>.mat`. Forty records in all:
+a healthy baseline plus three fault locations at three fault diameters, each
+at all four motor loads.
+
+| code | location | diameter | which frequency |
+|---|---|---|---|
+| `normal` | healthy | - | - |
+| `IR007` `IR014` `IR021` | inner race | 0.007 / 0.014 / 0.021 in | BPFI |
+| `B007` `B014` `B021` | ball | 0.007 / 0.014 / 0.021 in | BSF |
+| `OR007at6` `OR014at6` `OR021at6` | outer race, fault @6:00 | 0.007 / 0.014 / 0.021 in | BPFO |
+
+| load | approx. rpm | example id |
+|---|---|---|
+| 0 hp | 1797 | `OR007at6_0hp_130.mat` |
+| 1 hp | 1772 | `OR007at6_1hp_131.mat` |
+| 2 hp | 1750 | `OR007at6_2hp_132.mat` |
+| 3 hp | 1730 | `OR007at6_3hp_133.mat` |
+
+The fault records report their own speed in an `RPM` variable; the baselines
+do not, so their speed comes from the load table above.
 
 Each record is about 10 s long. Files keep their CWRU id in the name because
 the variables inside are prefixed with it (`X131_DE_time`), so the id is what
@@ -54,18 +71,9 @@ the 6205-2RS JEM drive-end bearing. At 1772 rpm, n = 29.53 Hz.
 
 ## Fault severity series, 1 hp
 
-The same three fault locations at the two larger machined diameters, added to
-test whether the time-domain statistics of step 02 survive a change of fault
-size. They do not - see below.
-
-| Local file | CWRU id | Condition |
-|---|---|---|
-| `OR014at6_1_198.mat` | 198 | outer race, 0.014 in, @6:00 |
-| `OR021at6_1_235.mat` | 235 | outer race, 0.021 in, @6:00 |
-| `IR014_1_170.mat` | 170 | inner race, 0.014 in |
-| `IR021_1_210.mat` | 210 | inner race, 0.021 in |
-| `B014_1_186.mat` | 186 | ball, 0.014 in |
-| `B021_1_223.mat` | 223 | ball, 0.021 in |
+The 1 hp records at the two larger machined diameters were added to test
+whether the time-domain statistics of step 02 survive a change of fault size.
+They do not.
 
 Whole-record kurtosis (Pearson convention) over all ten records, sorted:
 
@@ -84,9 +92,3 @@ A threshold fitted to the 0.007 in records therefore does not survive a change
 of fault size, let alone a change of machine. This is the evidence behind the
 claim that time-domain statistics identify a condition by lookup rather than
 by measurement.
-
-## Still to download, for step 07 only
-
-The classifier needs 3 fault types x 3 diameters (0.007/0.014/0.021 in) x
-4 loads, roughly 36 files from the 12k Drive End table, plus the four baseline
-files. Not needed before then.
