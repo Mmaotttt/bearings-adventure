@@ -1,0 +1,21 @@
+Resonance band selected blind, and the diagnosis it supports
+Grid: 55 bands, widths [500, 1000, 2000] Hz, centres every 250 Hz
+Threshold 11.06 = highest comb score the healthy record reaches over the same search
+
+record        band                 comb   x thr  call    truth   
+------------------------------------------------------------------
+Healthy       (750, 1250)         11.06    1.0x  no call healthy 
+Outer race    (2750, 3750)       431.90   39.1x  BPFO    BPFO    
+Inner race    (1250, 2250)       226.92   20.5x  BPFI    BPFI    
+Ball          (2500, 3000)         9.66    0.9x  no call BSF     
+
+Across fault size, 1 hp:
+  outer 0.007  (2750, 3750)    comb   431.90  call BPFO  correct
+  outer 0.014  (750, 1750)     comb    12.86  call BPFO  correct
+  outer 0.021  (1250, 2250)    comb    85.10  call BPFO  correct
+  inner 0.007  (1250, 2250)    comb   226.92  call BPFI  correct
+  inner 0.014  (2500, 3000)    comb    36.42  call BPFI  correct
+  inner 0.021  (2000, 4000)    comb    69.37  call BPFI  correct
+  ball  0.007  (2500, 3000)    comb     9.66  call BPFO  declined
+  ball  0.014  (750, 1250)     comb    10.37  call BPFO  declined
+  ball  0.021  (3250, 4250)    comb    14.52  call BPFI  false

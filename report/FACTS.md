@@ -1,0 +1,440 @@
+# Fact sheet
+
+Every number the report may state, with where it comes from. Nothing goes into
+the report that is not on this sheet or recomputed from the notebooks.
+
+Regenerate any figure or table by running the notebook named beside it.
+
+---
+
+## 1. Dataset
+
+Case Western Reserve University Bearing Data Center, drive-end accelerometer
+(`DE` channel). Test bearing SKF 6205-2RS JEM, deep-groove ball bearing.
+Faults are single points introduced by electro-discharge machining at 0.007,
+0.014 and 0.021 in diameter. Catalogue in `src/dataset.py`, fetched by
+`src/download_data.py`, checked by `src/verify_data.py`.
+
+| | |
+|---|---|
+| Records used | 40 |
+| Structure | healthy + 3 fault locations x 3 diameters, each at 4 motor loads |
+| Sampling rate | 12 kHz (fault records); 48 kHz for the baselines, decimated by 4 |
+| Record length | ~10 s, except file 97 at 5.08 s |
+| Motor loads | 0 / 1 / 2 / 3 hp at approximately 1797 / 1772 / 1750 / 1730 rpm |
+| Segments for classification | 2048 samples (0.171 s), non-overlapping, 2331 rows |
+
+### Fault frequency multipliers
+
+From the CWRU bearing specification for the 6205-2RS JEM. Multiply by shaft
+rate n = rpm / 60.
+
+| | multiplier | Hz at 1772 rpm (n = 29.53 Hz) |
+|---|---|---|
+| BPFO, outer race | 3.5848 | 105.9 |
+| BPFI, inner race | 5.4152 | 159.9 |
+| BSF, ball | 4.7135 | 139.2 |
+| FTF, cage | 0.39828 | 11.8 |
+
+### Three defects found in the data
+
+These were found by widening `src/verify_data.py` from four hardcoded files to
+the whole catalogue. All three are now assertions.
+
+**a. The baselines are sampled at 48 kHz, which the documentation does not
+state.** The apparatus page gives 12 kHz generally and 48 kHz "for drive end
+bearing faults", saying nothing about the baselines. Established from the data
+instead: three machine lines at 145.7 / 159.5 / 189.1 Hz in the known-12 kHz
+fault records appear at those same frequencies in a baseline only when it is
+read as 48 kHz, and at a quarter of them when read as 12 kHz. Durations agree
+too: 10.08 s against the fault records' ~10.2 s, where 12 kHz would give 40.3 s.
+Reading a baseline at 12 kHz puts its entire frequency axis out by a factor of
+four, silently.
+
+**b. File 99 contains a byte-for-byte copy of file 98's channel.** It holds
+`X099_DE_time` and also `X098_DE_time`, identical to file 98's to the last
+sample. Selecting the first key alphabetically returns file 98's samples under
+file 99's name - the same data in the dataset twice under two labels, which
+would leak across any train/test split. The loader now prefers the variable
+carrying the file's own id.
+
+**c. File 97 is 5.08 s where every other record is about 10.** The rate is not
+the problem: six machine lines land where a known 12 kHz record puts them only
+under a 48 kHz reading, and nowhere near it at 24 or 12 kHz. It is simply a
+shorter recording, recorded as a known exception rather than by widening the
+duration check.
+
+Two of the four baselines carry an `RPM` variable and two do not; none carries
+the base-plate channel the fault records have.
+
+---
+
+## 2. Time domain (notebook 01, 02) - figures 1, 2; table 1
+
+### Peak acceleration over the first 0.2 s, 1 hp, 0.007 in faults
+
+| | peak (g) |
+|---|---|
+| Healthy | 0.21 |
+| Outer race | 2.85 |
+| Inner race | 1.53 |
+| Ball | 0.44 |
+
+In that 0.2 s the outer-race record shows about 21 impulse bursts. BPFO x 0.2 s
+= 21.2. The rhythm is directly countable by eye in one of the four records and
+in neither of the other two faults.
+
+### Whole-record statistics, 1 hp, 0.007 in (table 1)
+
+Kurtosis in the Pearson convention, where Gaussian noise gives 3.
+
+| | RMS (g) | kurtosis | crest factor |
+|---|---|---|---|
+| Healthy | 0.0617 | 2.98 | 4.58 |
+| Outer race | 0.5919 | 7.59 | 5.26 |
+| Inner race | 0.2929 | 5.54 | 5.40 |
+| Ball | 0.1391 | 2.96 | 4.74 |
+
+The healthy record's 2.98 against the Gaussian 3.00 confirms that a sound
+bearing's vibration carries no impulsive structure.
+
+Over 2048-sample segments (59 per record) kurtosis ranges 2.81-3.37 for the
+healthy record and 2.67-3.40 for the ball fault: completely overlapping. Two
+of the three statistics therefore miss the ball fault entirely. Only RMS
+separates it, and RMS needs a healthy baseline of the same machine to mean
+anything.
+
+### Across fault size, 1 hp - whole-record kurtosis, sorted
+
+| | | | |
+|---|---|---|---|
+| 22.08 | inner 0.014 | 7.59 | outer 0.007 |
+| 21.97 | outer 0.021 | 5.54 | inner 0.007 |
+| 9.41 | ball 0.021 | **2.98** | **HEALTHY** |
+| 8.84 | ball 0.014 | 2.96 | ball 0.007 |
+| 7.67 | inner 0.021 | 2.94 | outer 0.014 |
+
+Outer race spans 2.94 to 21.97, inner race 5.54 to 22.08, ball 2.96 to 9.41.
+The classes interleave and the healthy record sits inside the range. Inner
+0.014 and outer 0.021 differ by 0.5 percent at different fault locations. The
+outer-race 0.014 in record reads 2.94 against the healthy 2.98 - a real fault
+that looks healthy on two statistics of three.
+
+---
+
+## 3. Raw spectrum (notebook 03) - figures 3a, 3b; table 2
+
+10.08 s at 12 kHz, Hann window, resolution 0.099 Hz.
+
+### Share of spectral energy per band (%), 1 hp, 0.007 in
+
+| | 0-500 Hz | 2000-4000 Hz |
+|---|---|---|
+| Healthy | 29.4 | 12.1 |
+| Outer race | **0.2** | **97.4** |
+| Inner race | 0.6 | 78.1 |
+| Ball | 1.9 | 92.7 |
+
+Relative to the healthy record, the outer-race record carries 1382 times the
+energy in 3000-4000 Hz and 379 times in 2000-3000 Hz, but **0.5 times** in
+0-500 Hz - less than the healthy record has, in the band where theory says the
+fault frequency lies.
+
+### Amplitude at the theoretical fault frequencies (g)
+
+| | BPFO 105.9 | BPFI 159.9 | BSF 139.2 | record RMS |
+|---|---|---|---|---|
+| Healthy | 0.00062 | 0.0093 | 0.00010 | 0.0617 |
+| Outer race | 0.00207 | 0.0131 | 0.00016 | 0.5921 |
+| Inner race | 0.00057 | 0.0124 | 0.00066 | 0.2928 |
+| Ball | 0.00051 | 0.0117 | 0.00052 | 0.1391 |
+
+At BPFI all four records carry a comparable peak, the healthy one included:
+the 159.5 Hz machine line happens to fall beside BPFI at 159.9 Hz. Reading the
+inner-race spectrum alone would confirm an inner-race fault, and the same
+reasoning applied to the healthy record would confirm one there too.
+
+At BPFO the outer-race record does carry 3.3 times the healthy amplitude, but
+0.00207 g against a record RMS of 0.5921 g is 0.35 percent - an order of
+magnitude below the machine lines beside it, and invisible on a linear axis.
+
+The strongest lines below 500 Hz are common to all four records: 360.0, 419.0,
+159.5, 353.4 and 189.1 Hz. 360 Hz is the sixth harmonic of the 60 Hz supply.
+
+---
+
+## 4. Time-frequency (notebook 04) - figures 4a, 4b, 4c; table 3
+
+STFT with a 64-sample Hann window and hop 8, giving a 1500 Hz frame rate and
+a 187.5 Hz frequency resolution.
+
+**The parameters cannot be copied from a tutorial.** The common 256-sample
+window at 50 percent overlap leaves a hop of 128 and a frame rate of 93.8 Hz,
+whose Nyquist limit is 46.9 Hz. BPFO at 105.9 Hz is then not merely blurred
+but absent from the frequency axis - the first attempt raised an empty-slice
+error rather than returning a low score. The window and hop have to be derived
+from the rhythm being looked for.
+
+### Peak-to-background ratio in the spectrum of the 2000-4000 Hz band energy
+
+| record | BPFO | BPFI | BSF |
+|---|---|---|---|
+| Healthy | 3.6 | 7.2 | 2.3 |
+| Outer race | **601.0** | 9.5 | 30.2 |
+| Inner race | 3.3 | **221.8** | 3.6 |
+| Ball | 10.7 | 10.5 | 2.3 |
+
+Each record peaks on its own fault frequency and nowhere else. The healthy row
+sets the false-alarm floor. Outer-race harmonics: 601, 504, 371, 325 at 1x to
+4x BPFO.
+
+The spectrogram shows why the ball fault fails where numbers alone do not: its
+3000-3800 Hz band is clearly brighter than the healthy record's, but it does
+not flicker. Raised amplitude is what detection needs; periodicity is what
+diagnosis needs, and this fault has only the first.
+
+---
+
+## 5. Envelope spectrum (notebook 05) - figures 5a, 5b; table 4
+
+Band-pass 2000-4000 Hz, 4th-order Butterworth, zero phase; Hilbert envelope;
+mean removed; transform.
+
+### Verification on a synthetic signal
+
+Impacts every 1/105.9 s exciting a 3 kHz decaying resonance, buried under three
+times as much noise - the physical model, so the answer is known by
+construction. Direct FFT scores a peak ratio of 3.0 at 105.9 Hz; the envelope
+spectrum scores 31.8, with the peak at 105.90 Hz.
+
+### Result on the 1 hp, 0.007 in records
+
+| record | frequency | ratio | measured | error |
+|---|---|---|---|---|
+| Outer race | BPFO 105.9 | **635** | 106.3 Hz | +0.4% |
+| Inner race | BPFI 159.9 | **237** | 159.5 Hz | -0.25% |
+| Ball | BSF 139.2 | 2.1 | - | - |
+| Healthy | (floor) | 4.3 / 9.7 / 2.2 | - | - |
+
+Outer-race harmonics at 1x to 5x BPFO are all strongly present. The inner-race
+record scores 2.9 at BPFO and 4.1 at BSF against 236.9 at BPFI.
+
+Compare with the raw spectrum: at BPFI the healthy and inner-race records were
+within 33 percent of each other; after band-passing they differ by a factor of
+24, because the 159.5 Hz machine line is removed before the envelope is taken.
+
+### Two measurements that do not match the textbook
+
+Sidebands spaced at shaft rate are expected around BPFI, because an inner-race
+fault rotates through the load zone, and not around BPFO, because an
+outer-race fault is stationary. Measured: the inner race's +/-1 shaft-rate
+pair is weak (8.8 and 12.7) while +/-2 is strong (98.7 and 50.8), and the
+outer race carries shaft-rate sidebands it is not supposed to have (106.1 and
+113.4). Reported as an unexplained observation.
+
+Omitting the envelope's mean leaves a DC peak 2.3 times the BPFO peak - not
+the catastrophe usually described, but enough to halve every real peak on an
+autoscaled axis and to defeat any automatic peak search.
+
+---
+
+## 6. Resonance band selection (notebook 06) - figures 6a, 6b, 6c; table 5
+
+### The procedure
+
+The three candidate frequencies follow from the bearing's geometry and the
+shaft speed, both known before any diagnosis; which one is faulted is not.
+So every candidate band is scored on all three candidates and the best is
+kept, which decides the band and the diagnosis together without using the
+answer.
+
+Score: the geometric mean of the peak ratios at 1x to 4x the candidate
+frequency. A geometric mean requires every harmonic to be present, where an
+arithmetic mean would let one tall line carry the score - and one tall line is
+what section 3 showed can be a machine line.
+
+Grid: 55 bands, widths 500 / 1000 / 2000 Hz, centres every 250 Hz from 250 to
+5800 Hz.
+
+### Why not kurtosis
+
+The kurtogram's usual criterion, applied here, retains this fraction of the
+best achievable peak ratio:
+
+| | kurtosis | comb score |
+|---|---|---|
+| Outer race | 23.9% | **98.5%** |
+| Inner race | 64.4% | **95.8%** |
+| Ball | 26.9% | 33.8% |
+
+Kurtosis measures impulsiveness, and impulses arise from sensor sparks, single
+mechanical knocks and filter ringing as readily as from bearings. The comb
+score additionally requires periodicity.
+
+A concrete instance: before edge trimming, the kurtosis criterion selected
+250-750 Hz for the outer race. Trimming 5 percent from each end moved the pick
+to 4750-5750 Hz. The original selection had been `filtfilt`'s own start-up
+transient, which does not raise an error and looks like a result.
+
+### Threshold
+
+The highest comb score the healthy record reaches over the same 55-band
+search: **11.06**. Its median over single bands is 3.57 and its 90th
+percentile 8.55. Taking a single-band figure as the threshold would ignore
+that the maximum of many noisy numbers exceeds any one of them, and would
+manufacture false positives.
+
+### Result, 1 hp, 0.007 in
+
+| record | band | comb | x threshold | call | truth |
+|---|---|---|---|---|---|
+| Healthy | 750-1250 | 11.06 | 1.0 | no call | healthy |
+| Outer race | 2750-3750 | 431.90 | **39.1** | BPFO | BPFO |
+| Inner race | 1250-2250 | 226.92 | **20.5** | BPFI | BPFI |
+| Ball | 2500-3000 | 9.66 | 0.9 | no call | BSF |
+
+### Across fault size, 1 hp - the honest result
+
+| record | band | comb | x threshold | call | truth | |
+|---|---|---|---|---|---|---|
+| outer 0.007 | 2750-3750 | 431.90 | 39.1 | BPFO | BPFO | correct |
+| outer 0.014 | 750-1750 | 12.86 | **1.2** | BPFO | BPFO | correct |
+| outer 0.021 | 1250-2250 | 85.10 | 7.7 | BPFO | BPFO | correct |
+| inner 0.007 | 1250-2250 | 226.92 | 20.5 | BPFI | BPFI | correct |
+| inner 0.014 | 2500-3000 | 36.42 | 3.3 | BPFI | BPFI | correct |
+| inner 0.021 | 2000-4000 | 69.37 | 6.3 | BPFI | BPFI | correct |
+| ball 0.007 | 2500-3000 | 9.66 | 0.9 | - | BSF | declined |
+| ball 0.014 | 750-1250 | 10.37 | 0.9 | - | BSF | declined |
+| ball 0.021 | 3250-4250 | 14.52 | **1.3** | BPFI | BSF | **false** |
+
+All six race faults are diagnosed correctly even though the selected band
+moves with both fault location and fault size. One false positive in nine.
+
+It cannot be removed by raising the threshold: the only barely-correct record
+(outer 0.014 at 1.2x) and the false one (ball 0.021 at 1.3x) are not separable
+by this score. Hence a three-tier rule:
+
+| comb / threshold | verdict | on these records |
+|---|---|---|
+| > 5x | diagnosis | 4 records, **4 correct** |
+| 1x to 5x | tentative, re-measure | 3 records, 2 correct 1 wrong |
+| < 1x | no call | 2 records |
+
+Every error falls in the tier that admits to being unsure.
+
+### If one fixed band must be used
+
+Geometric mean of the peak ratio over the six race records:
+
+| band | geometric mean |
+|---|---|
+| **1000-3000** | **109.8** |
+| 2000-3000 | 102.0 |
+| 2000-4000 | 93.6 |
+| 2750-3750 | 80.7 |
+| 1250-2250 | 56.6 |
+
+1000-3000 Hz is best on none of the six individually and poor on none. The
+2000-4000 Hz band used through section 5 - chosen by eye from a figure - drops
+to 5.9 on the outer-race 0.014 in record.
+
+---
+
+## 7. Classifier (notebook 07) - figures 7a, 7b, 7c; table 6
+
+40 records, 2048-sample non-overlapping segments, 2331 rows, 9 features,
+envelope band 1000-3000 Hz, RBF SVM (C = 10) on standardised features.
+
+Features: RMS, kurtosis, crest factor (time); peak-to-background ratio at
+BPFO, BPFI, BSF and their second harmonics (envelope). Peak ratios rather than
+energy shares - across unseen fault diameters, ratios score 50.7 percent
+against shares' 42.1, because a share's denominator is the segment's own
+energy, which mostly encodes load and fault size.
+
+### Accuracy by split
+
+| split | time (3) | envelope (6) | all (9) |
+|---|---|---|---|
+| A random shuffle | 97.0% | 77.9% | 95.9% |
+| B grouped by file | 96.3% | 76.1% | 93.5% |
+| C leave one load out | 96.5% | 75.6% | 93.9% |
+| D leave one fault size out | **33.1%** | 50.7% | 48.3% |
+
+Split D tests the three fault classes only; chance is 33.3 percent. The
+time-domain features score 33.1 - not weak, empty.
+
+Grouping by file costs only 2.4 points, because holding out one record leaves
+the same fault at the same diameter under three other loads in the training
+set. The leak that matters is between conditions, not between segments.
+
+### Split D by held-out diameter
+
+| | 0.007 | 0.014 | 0.021 |
+|---|---|---|---|
+| time (3) | 33.3% | 29.8% | 36.3% |
+| envelope (6) | 58.4% | 31.6% | 62.0% |
+| all (9) | 65.4% | 30.8% | 48.7% |
+
+The 0.014 in column is worst for every feature set; that group includes the
+outer-race record whose kurtosis is below the healthy record's.
+
+### Confusion, 0.021 in held out, all nine features
+
+Overall 48.7 percent, carried entirely by one class:
+
+| true | recall |
+|---|---|
+| outer | **0%** |
+| inner | 100% |
+| ball | 46.2% |
+
+Accuracy alone conceals a model that identifies not one outer-race segment.
+Under split B the overall figure is 93.5 percent with the main confusion
+between outer race and ball.
+
+### Segment length
+
+| length | B grouped | D unseen size |
+|---|---|---|
+| 512 | 87.7% | 54.7% |
+| 1024 | 91.5% | **60.6%** |
+| 2048 | 93.5% | 48.3% |
+| 4096 | **94.2%** | 47.3% |
+
+The best segment length depends on which split is being optimised. 2048 was
+used throughout and is best on neither.
+
+### Against the method that does not learn
+
+On the same unseen diameters, the section 6 rule diagnoses all six race
+records correctly, having never been trained. Learning a map from waveform to
+label does not extrapolate to a fault that was not in the training set;
+measuring a frequency that geometry predicts does.
+
+---
+
+## 8. Figure and table inventory
+
+| file | notebook | shows |
+|---|---|---|
+| `fig01_waveforms.png` | 01 | four time-domain waveforms, 0.2 s |
+| `fig02_time_stats.png` | 02 | RMS / kurtosis / crest, per-segment spread |
+| `fig03a_spectrum_full.png` | 03 | raw spectra 0-6000 Hz, log axis |
+| `fig03b_spectrum_zoom.png` | 03 | 0-500 Hz with fault frequencies marked |
+| `fig04a_spectrogram.png` | 04 | spectrograms, 0.1 s, periodic striping |
+| `fig04b_band_energy.png` | 04 | 2-4 kHz band energy against time |
+| `fig04c_band_energy_spectrum.png` | 04 | spectrum of that band energy |
+| `fig05a_envelope_construction.png` | 05 | raw, band-passed, envelope |
+| `fig05b_envelope_spectra.png` | 05 | envelope spectra, four records |
+| `fig06a_band_map.png` | 06 | comb score over 55 candidate bands |
+| `fig06b_criterion_comparison.png` | 06 | comb score against kurtosis |
+| `fig06c_robustness.png` | 06 | across fault size |
+| `fig07a_confusion.png` | 07 | confusion, split B and split D |
+| `fig07b_accuracy_by_split.png` | 07 | accuracy, four splits |
+| `fig07c_feature_space.png` | 07 | feature space, colour by class |
+| `table01_time_stats.txt` | 02 | whole-record statistics |
+| `table02_band_energy.txt` | 03 | energy share per band |
+| `table03_stft_peak_ratios.txt` | 04 | peak ratios, STFT band energy |
+| `table04_envelope_peak_ratios.txt` | 05 | peak ratios, envelope spectrum |
+| `table05_band_selection.txt` | 06 | selected bands and verdicts |
+| `table06_classifier.txt` | 07 | accuracy by split |

@@ -8,6 +8,8 @@ and ball faults by the frequency at which a rolling element strikes the defect.
     data/       CWRU .mat records, plus FILES.md - the manifest
     notebooks/  exploratory work, one notebook per stage
     figures/    exported PNGs for the report
+    report/     FACTS.md - every number with its provenance
+                OUTLINE.md - the report's structure
     src/        the functions the notebooks settle on
                   cwru_io.py   loading records, fault frequencies
                   envelope.py  envelope analysis, band selection

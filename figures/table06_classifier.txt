@@ -1,0 +1,12 @@
+Four-class segment classification, RBF SVM on standardised features
+40 records, 2048-sample segments, 2331 rows, envelope band 1000-3000 Hz
+
+split                           time-domain (3)       envelope (6)            all (9)
+-------------------------------------------------------------------------------------
+A random shuffle                          97.0%              77.9%              95.9%
+B grouped by file                         96.3%              76.1%              93.5%
+C leave one load out                      96.5%              75.6%              93.9%
+D leave one fault size out                33.1%              50.7%              48.3%
+
+D tests three fault classes only; chance is 33.3%.
+Time-domain features reach 33.1% there - no information at all.
