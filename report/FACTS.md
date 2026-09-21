@@ -5,6 +5,38 @@ the report that is not on this sheet or recomputed from the notebooks.
 
 Regenerate any figure or table by running the notebook named beside it.
 
+## Two conventions that resolve apparent contradictions
+
+**Precision.** Values are listed as the code produces them. **In the report's
+prose, round to three significant figures** - 237, not 236.9; 432, not 431.90.
+The generated `.txt` tables keep the fuller precision; that difference between
+a table and a sentence is normal and needs no comment. Where this sheet shows
+both forms of the same quantity, the three-figure form is the one to write.
+
+**Record length.** Two conventions appear, deliberately:
+
+| convention | used in | why |
+|---|---|---|
+| whole record, each its own length | sections 2, 7 | a per-record statistic needs no common length |
+| truncated to 120976 samples | sections 3, 4, 5, 6 | spectra are compared across records, and frequency resolution is fs/N, so unequal N would mean unequal line spacing |
+
+120976 samples is the shortest of the four 1 hp records used in those sections
+(the healthy one), giving 10.081 s and a resolution of 0.0992 Hz for **all**
+records in those sections, not only the healthy one.
+
+This is why RMS appears twice with different values, and both are correct:
+
+| | whole record | truncated to 120976 |
+|---|---|---|
+| Healthy | 0.0617 | 0.0617 |
+| Outer race | **0.5919** | **0.5921** |
+| Inner race | **0.2929** | **0.2928** |
+| Ball | 0.1391 | 0.1391 |
+
+The report should use the whole-record column in section 4.1 and the
+truncated column wherever it appears beside a spectral quantity, and say once,
+in the method, that spectra are computed on a common 120976-sample window.
+
 ---
 
 ## 1. Dataset
@@ -23,6 +55,16 @@ Faults are single points introduced by electro-discharge machining at 0.007,
 | Record length | ~10 s, except file 97 at 5.08 s |
 | Motor loads | 0 / 1 / 2 / 3 hp at approximately 1797 / 1772 / 1750 / 1730 rpm |
 | Segments for classification | 2048 samples (0.171 s), non-overlapping, 2331 rows |
+
+2331 rather than 40 x 59 = 2360, because record lengths differ slightly:
+
+| segments | records | total |
+|---|---|---|
+| 29 | 1 (`normal_0hp_97.mat`, the 5.08 s baseline) | 29 |
+| 59 | 38 | 2242 |
+| 60 | 1 (`IR007_3hp_108.mat`, 122917 samples) | 60 |
+
+Net: 30 fewer from the short baseline, one more from the longest record.
 
 ### Fault frequency multipliers
 
@@ -217,7 +259,8 @@ spectrum scores 31.8, with the peak at 105.90 Hz.
 | Healthy | (floor) | 4.3 / 9.7 / 2.2 | - | - |
 
 Outer-race harmonics at 1x to 5x BPFO are all strongly present. The inner-race
-record scores 2.9 at BPFO and 4.1 at BSF against 236.9 at BPFI.
+record scores 2.9 at BPFO and 4.1 at BSF against 237 at BPFI - the computed
+value is 236.9; write 237.
 
 Compare with the raw spectrum: at BPFI the healthy and inner-race records were
 within 33 percent of each other; after band-passing they differ by a factor of
@@ -321,6 +364,34 @@ by this score. Hence a three-tier rule:
 | < 1x | no call | 2 records |
 
 Every error falls in the tier that admits to being unsure.
+
+### How unstable the grey tier is
+
+The same nine records scored on the whole record instead of the common
+120976-sample window - a difference of at most 2000 samples, under 2 percent:
+
+| record | truncated | whole record | |
+|---|---|---|---|
+| outer 0.007 | 431.90 correct | 462.28 correct | |
+| outer 0.014 | 12.86 correct | 13.52 correct | |
+| outer 0.021 | 85.10 correct | 87.35 correct | |
+| inner 0.007 | 226.92 correct | 224.33 correct | |
+| inner 0.014 | 36.42 correct | 36.77 correct | |
+| inner 0.021 | 69.37 correct | 70.51 correct | |
+| ball 0.007 | 9.66 declined | 9.76 declined | |
+| **ball 0.014** | **10.37 declined** | **11.28 false** | **verdict flips** |
+| ball 0.021 | 14.52 false | 14.29 false | |
+
+One record changes verdict, and it is the one nearest the 11.06 threshold.
+Every record more than a few percent clear of the threshold keeps its verdict.
+
+This is the strongest available evidence for the three-tier rule: in the
+1x-to-5x tier the verdict is not stable against a two percent change in how
+much data is used, so a single number there cannot be treated as a diagnosis.
+Above 5x nothing moves.
+
+Both columns are correct; the truncated column is the one quoted elsewhere in
+this sheet, because sections 3 to 6 all use the common window.
 
 ### If one fixed band must be used
 
@@ -438,3 +509,125 @@ measuring a frequency that geometry predicts does.
 | `table04_envelope_peak_ratios.txt` | 05 | peak ratios, envelope spectrum |
 | `table05_band_selection.txt` | 06 | selected bands and verdicts |
 | `table06_classifier.txt` | 07 | accuracy by split |
+
+---
+
+## 9. Appendix material
+
+### 9.1 Repository
+
+**There is no remote yet.** The repository is local only - `git remote -v` is
+empty. Before the report is submitted, push it to GitHub and put the URL here.
+Until then the report should say `[REPOSITORY URL]` rather than invent one.
+
+Suggested one-line description of the layout:
+
+> `data/` holds the CWRU records, which are fetched by `src/download_data.py`
+> rather than committed; `src/` holds the loading, envelope-analysis and
+> feature code; `notebooks/` works through the seven stages in order; and
+> `figures/` holds every figure in this report, each regenerated by the
+> notebook that produced it.
+
+### 9.2 Data checks - actual output of `src/verify_data.py`
+
+Run on 2026-09-21. Reproduce with `python src/verify_data.py`.
+
+```
+40 of 40 catalogue records on disk
+
+file                      variable            s   rpm    BPFO    BPFI     BSF   label
+------------------------------------------------------------------------------------------------
+normal_0hp_97.mat         X097_DE_time     5.08  1796   107.3   162.1   141.1   healthy 0hp
+normal_1hp_98.mat         X098_DE_time    10.08  1772   105.9   159.9   139.2   healthy 1hp
+normal_2hp_99.mat         X099_DE_time    10.11  1750   104.6   157.9   137.5   healthy 2hp
+normal_3hp_100.mat        X100_DE_time    10.12  1725   103.1   155.7   135.5   healthy 3hp
+IR007_0hp_105.mat         X105_DE_time    10.11  1797   107.4   162.2   141.2   inner 0.007" 0hp
+IR007_1hp_106.mat         X106_DE_time    10.17  1772   105.9   159.9   139.2   inner 0.007" 1hp
+IR007_2hp_107.mat         X107_DE_time    10.18  1748   104.4   157.8   137.3   inner 0.007" 2hp
+IR007_3hp_108.mat         X108_DE_time    10.24  1721   102.8   155.3   135.2   inner 0.007" 3hp
+IR014_0hp_169.mat         X169_DE_time    10.15  1796   107.3   162.1   141.1   inner 0.014" 0hp
+IR014_1hp_170.mat         X170_DE_time    10.15  1774   106.0   160.1   139.4   inner 0.014" 1hp
+IR014_2hp_171.mat         X171_DE_time    10.15  1752   104.7   158.1   137.6   inner 0.014" 2hp
+IR014_3hp_172.mat         X172_DE_time    10.14  1728   103.2   156.0   135.7   inner 0.014" 3hp
+IR021_0hp_209.mat         X209_DE_time    10.18  1797   107.4   162.2   141.2   inner 0.021" 0hp
+IR021_1hp_210.mat         X210_DE_time    10.13  1774   106.0   160.1   139.4   inner 0.021" 1hp
+IR021_2hp_211.mat         X211_DE_time    10.15  1752   104.7   158.1   137.6   inner 0.021" 2hp
+IR021_3hp_212.mat         X212_DE_time    10.17  1728   103.2   156.0   135.7   inner 0.021" 3hp
+B007_0hp_118.mat          X118_DE_time    10.21  1796   107.3   162.1   141.1   ball 0.007" 0hp
+B007_1hp_119.mat          X119_DE_time    10.12  1772   105.9   159.9   139.2   ball 0.007" 1hp
+B007_2hp_120.mat          X120_DE_time    10.13  1748   104.4   157.8   137.3   ball 0.007" 2hp
+B007_3hp_121.mat          X121_DE_time    10.13  1722   102.9   155.4   135.3   ball 0.007" 3hp
+B014_0hp_185.mat          X185_DE_time    10.15  1796   107.3   162.1   141.1   ball 0.014" 0hp
+B014_1hp_186.mat          X186_DE_time    10.18  1772   105.9   159.9   139.2   ball 0.014" 1hp
+B014_2hp_187.mat          X187_DE_time    10.17  1749   104.5   157.9   137.4   ball 0.014" 2hp
+B014_3hp_188.mat          X188_DE_time    10.18  1724   103.0   155.6   135.4   ball 0.014" 3hp
+B021_0hp_222.mat          X222_DE_time    10.17  1796   107.3   162.1   141.1   ball 0.021" 0hp
+B021_1hp_223.mat          X223_DE_time    10.14  1774   106.0   160.1   139.4   ball 0.021" 1hp
+B021_2hp_224.mat          X224_DE_time    10.18  1754   104.8   158.3   137.8   ball 0.021" 2hp
+B021_3hp_225.mat          X225_DE_time    10.18  1729   103.3   156.0   135.8   ball 0.021" 3hp
+OR007at6_0hp_130.mat      X130_DE_time    10.17  1796   107.3   162.1   141.1   outer 0.007" 0hp
+OR007at6_1hp_131.mat      X131_DE_time    10.20  1773   105.9   160.0   139.3   outer 0.007" 1hp
+OR007at6_2hp_132.mat      X132_DE_time    10.12  1750   104.6   157.9   137.5   outer 0.007" 2hp
+OR007at6_3hp_133.mat      X133_DE_time    10.21  1725   103.1   155.7   135.5   outer 0.007" 3hp
+OR014at6_0hp_197.mat      X197_DE_time    10.15  1796   107.3   162.1   141.1   outer 0.014" 0hp
+OR014at6_1hp_198.mat      X198_DE_time    10.18  1772   105.9   159.9   139.2   outer 0.014" 1hp
+OR014at6_2hp_199.mat      X199_DE_time    10.15  1749   104.5   157.9   137.4   outer 0.014" 2hp
+OR014at6_3hp_200.mat      X200_DE_time    10.17  1723   102.9   155.5   135.4   outer 0.014" 3hp
+OR021at6_0hp_234.mat      X234_DE_time    10.20  1796   107.3   162.1   141.1   outer 0.021" 0hp
+OR021at6_1hp_235.mat      X235_DE_time    10.17  1771   105.8   159.8   139.1   outer 0.021" 1hp
+OR021at6_2hp_236.mat      X236_DE_time    10.19  1748   104.4   157.8   137.3   outer 0.021" 2hp
+OR021at6_3hp_237.mat      X237_DE_time    10.17  1721   102.8   155.3   135.2   outer 0.021" 3hp
+
+all 40 records on the 12000 Hz grid, speeds consistent with their load, durations ~10 s, no two holding the same samples.
+```
+
+The final line is the assertion set: one sampling grid, speeds consistent with
+the nominal for each load, durations near ten seconds, and no two records
+holding identical samples. The last of those exists because of defect (b) in
+section 1.
+
+For the report, the 40-row listing can be cut to the four baselines plus a
+note, or reproduced in full - it is the direct evidence that the data was
+checked rather than assumed.
+
+### 9.3 Environment
+
+| | |
+|---|---|
+| Python | 3.12.1 |
+| numpy | 2.4.4 |
+| scipy | 1.17.1 |
+| matplotlib | 3.10.8 |
+| scikit-learn | 1.8.0 |
+| jupyterlab | 4.6.3 |
+| platform | Windows 11, AMD64 |
+
+### 9.4 References - UNVERIFIED, check before citing
+
+These are the standard references for the methods used here, recalled rather
+than looked up. **The author must confirm every author, year, volume and page
+range against the publisher's record before any of them goes into a
+bibliography.** Wrong citation details are worse than no citations.
+
+1. Randall, R. B. and Antoni, J. "Rolling element bearing diagnostics - a
+   tutorial." *Mechanical Systems and Signal Processing*, 2011. The standard
+   tutorial on envelope analysis for bearings; the right citation for the
+   carrier-and-modulation argument in section 3.
+
+2. Antoni, J. "Fast computation of the kurtogram for the detection of transient
+   faults." *Mechanical Systems and Signal Processing*, 2007. (See also Antoni
+   2006 on spectral kurtosis.) The right citation for the kurtogram, which
+   section 3.4 departs from and should therefore cite.
+
+3. Smith, W. A. and Randall, R. B. "Rolling element bearing diagnostics using
+   the Case Western Reserve University data: a benchmark study." *Mechanical
+   Systems and Signal Processing*, 2015. A published assessment of this exact
+   dataset which classifies records by how diagnosable they are. **Worth
+   reading before submitting**: it bears directly on the 0.014 in outer-race
+   record that behaves anomalously here, and citing it turns that anomaly from
+   an unexplained oddity into a known property of the dataset.
+
+If the author would rather not cite at all, section 1 can carry the background
+in its own words with no references, and the report loses little - it is a
+project report, not a paper. Citing three sources badly is worse than citing
+none.

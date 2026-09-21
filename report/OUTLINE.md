@@ -122,7 +122,7 @@ shows, what the number is, what it rules out.
 |---|---|---|
 | 4.1 Time domain | 1, 2 + table 1 | ~21 bursts against BPFO x 0.2 s = 21.2; healthy kurtosis 2.98 against the Gaussian 3; ball fault invisible to two statistics of three |
 | 4.2 Raw spectrum | 3a, 3b | energy at 2-4 kHz, not at the fault frequency; the BPFI peak present in the healthy record too |
-| 4.3 Time-frequency | 4a, 4c | periodic striping; band energy gives 601 at BPFO; the ball fault's band is bright but unmodulated |
+| 4.3 Time-frequency | 4a, 4b, 4c | periodic striping; the band energy as a time series, which is the envelope in crude form; 601 at BPFO; the ball fault's band is bright but unmodulated |
 | 4.4 Envelope spectrum | 5a, 5b | 635 and 237, errors under 0.5 percent, five harmonics; healthy floor 4.3 / 9.7 / 2.2 |
 | 4.5 Band selection | 6a, 6b, 6c | comb against kurtosis; threshold 11.06; six race faults correct across fault size; **one false positive** |
 | 4.6 Classification | 7a, 7b, 7c | 97.0 / 96.3 / 96.5 / 33.1; outer-race recall 0 percent on an unseen diameter |
@@ -203,6 +203,23 @@ known answer, a second fault size. None of them raised an error.
 - Repository link, with a one-line description of the layout.
 - `src/verify_data.py` output, showing what is asserted about the data.
 - Environment: Python version and library versions.
+
+---
+
+## If the page count runs over
+
+Fifteen figures is a lot for twelve pages. Cut in this order, and no further:
+
+1. **fig04b** - the band energy against time. It is the clearest single picture
+   of the carrier-and-modulation idea, but fig04a already shows the rhythm and
+   fig04c already shows its spectrum, so it is the one redundancy.
+2. **fig03a** - the full spectra. Its content survives as the energy table.
+3. **fig07c** - the feature space. It explains *why* the classifier fails,
+   which is valuable, but fig07b already establishes *that* it does.
+
+Never cut fig05b, fig06a, fig06c or fig07b. Those four carry the argument:
+the diagnosis works, the band choice is earned, it survives a change of fault
+size, and the classifier's accuracy depends on the split.
 
 ---
 
