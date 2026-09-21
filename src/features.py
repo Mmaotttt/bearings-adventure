@@ -8,10 +8,18 @@ notebook can ask what each family is worth:
             fault but never name one, because they ignore the order of the
             samples entirely.
 
-  envelope  the share of the envelope spectrum's energy sitting at BPFO,
-            BPFI, BSF and their second harmonics - the quantities steps 05
-            and 06 built. These do depend on order, and on the bearing's
-            geometry, which is what makes them able to name a fault.
+  envelope  how far the envelope spectrum stands above its own local
+            background at BPFO, BPFI, BSF and their second harmonics - the
+            quantity steps 05 and 06 built. These do depend on order, and on
+            the bearing's geometry, which is what lets them name a fault.
+
+            Peak ratios rather than energy shares: a ratio is measured
+            against the spectrum a few Hz away, so it survives a change in
+            how hard the machine happens to be vibrating. A share is measured
+            against the segment's own total, which mostly encodes load and
+            fault size - the very things the classifier must not lean on if
+            it is to work on a fault it has not seen. Measured across unseen
+            fault diameters, ratios score 51 percent against shares' 42.
 
 The fault frequencies are recomputed for every record: the four motor loads
 run at four different speeds, so a frequency fixed at the 1 hp value would be
@@ -49,26 +57,21 @@ def time_features(seg):
 
 
 def envelope_features(seg, fault_freqs, band=BAND, fs=ev.FS):
-    """Share of envelope-spectrum energy at each candidate fault frequency.
+    """Peak-to-background ratio at each candidate fault frequency.
 
-    Shares rather than absolute amplitudes: an absolute level would mostly
-    encode how hard the machine happens to be vibrating, which is the load
-    and the fault size talking, not the fault location. Normalising by the
-    segment's own envelope energy removes that.
+    Tolerances are in bins rather than Hz. A 2048-sample segment resolves
+    5.9 Hz, so a fixed +/-2.5 Hz window would fall inside a single bin and a
+    fixed 10-60 Hz background ring would hold only a handful - both fine for
+    a ten-second record and useless for a segment.
     """
     # No edge trimming here - a 2048-sample segment cannot spare 10 percent,
     # and these segments come from the middle of a long record rather than
     # from a filter start-up, so the transient argument does not apply.
     f, a = ev.envelope_spectrum(seg, band, fs, trim=0.0)
-    total = np.sum(a ** 2) + 1e-20
     df = f[1] - f[0]
-    out = []
-    for key in ev.FAULT_KEYS:
-        for h in HARMONICS:
-            f0 = h * fault_freqs[key]
-            near = np.abs(f - f0) <= 1.5 * df      # the bin and its neighbours
-            out.append(float(np.sum(a[near] ** 2) / total))
-    return out
+    return [ev.peak_ratio(f, a, h * fault_freqs[key],
+                          tol=1.5 * df, bg=(4 * df, 40 * df))
+            for key in ev.FAULT_KEYS for h in HARMONICS]
 
 
 def record_rows(record, data_dir, length=SEGMENT, band=BAND):
