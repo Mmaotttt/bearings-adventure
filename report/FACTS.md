@@ -605,32 +605,91 @@ checked rather than assumed.
 | jupyterlab | 4.6.3 |
 | platform | Windows 11, AMD64 |
 
-### 9.4 References - UNVERIFIED, check before citing
+### 9.4 References - bibliographic details verified
 
-These are the standard references for the methods used here, recalled rather
-than looked up. **The author must confirm every author, year, volume and page
-range against the publisher's record before any of them goes into a
-bibliography.** Wrong citation details are worse than no citations.
+Checked against CrossRef on 2026-09-24. Authors, journal, volume, pages and
+DOI below are confirmed and may be cited as written.
 
-1. Randall, R. B. and Antoni, J. "Rolling element bearing diagnostics - a
-   tutorial." *Mechanical Systems and Signal Processing*, 2011. The standard
-   tutorial on envelope analysis for bearings; the right citation for the
-   carrier-and-modulation argument in section 3.
+1. Randall, R. B., & Antoni, J. (2011). Rolling element bearing diagnostics -
+   a tutorial. *Mechanical Systems and Signal Processing*, **25**(2), 485-520.
+   doi:10.1016/j.ymssp.2010.07.017
+   The standard tutorial on envelope analysis; cite for the carrier-and-
+   modulation argument in section 3.
 
-2. Antoni, J. "Fast computation of the kurtogram for the detection of transient
-   faults." *Mechanical Systems and Signal Processing*, 2007. (See also Antoni
-   2006 on spectral kurtosis.) The right citation for the kurtogram, which
-   section 3.4 departs from and should therefore cite.
+2. Antoni, J. (2007). Fast computation of the kurtogram for the detection of
+   transient faults. *Mechanical Systems and Signal Processing*, **21**(1),
+   108-124. doi:10.1016/j.ymssp.2005.12.002
+   The kurtogram. Section 3.4 departs from it and should therefore cite it.
 
-3. Smith, W. A. and Randall, R. B. "Rolling element bearing diagnostics using
-   the Case Western Reserve University data: a benchmark study." *Mechanical
-   Systems and Signal Processing*, 2015. A published assessment of this exact
-   dataset which classifies records by how diagnosable they are. **Worth
-   reading before submitting**: it bears directly on the 0.014 in outer-race
-   record that behaves anomalously here, and citing it turns that anomaly from
-   an unexplained oddity into a known property of the dataset.
+3. Smith, W. A., & Randall, R. B. (2015). Rolling element bearing diagnostics
+   using the Case Western Reserve University data: a benchmark study.
+   *Mechanical Systems and Signal Processing*, **64-65**, 100-131.
+   doi:10.1016/j.ymssp.2015.04.021
+   A published assessment of this exact dataset. See 9.5.
 
-If the author would rather not cite at all, section 1 can carry the background
-in its own words with no references, and the report loses little - it is a
-project report, not a paper. Citing three sources badly is worse than citing
-none.
+---
+
+### 9.5 What the benchmark study says about these records
+
+**Verification status, which decides how this may be written.**
+
+| | status |
+|---|---|
+| Bibliographic details above | **verified** against CrossRef |
+| The substance below | **corroborated by secondary sources, not read in the original** |
+| Any direct quotation | **not verified - do not quote** |
+
+The substance, as reported by sources citing the study: Smith and Randall
+applied three established diagnostic techniques to the whole CWRU dataset and
+graded every record by how diagnosable it proved. Relatively few records gave
+the classical characteristics of their stated fault type; several were
+reported as difficult or not diagnosable by any technique applied, **the
+0.014 in drive-end inner-race and outer-race records among them, along with
+most of the ball-fault records**.
+
+**Until the PDF is in hand, paraphrase and attribute - do not quote.** A
+paraphrase that is slightly loose is a small error; a fabricated quotation is
+a serious one, and a reader who checks will check the quotation first.
+
+### 9.6 How this may be used, and how it may not
+
+Three places in the report currently say, in effect, "I do not know why":
+
+| section | the unexplained thing |
+|---|---|
+| 4.1 | outer race 0.014 in has kurtosis 2.94, below the healthy record's 2.98 |
+| 4.5 | that record is only just correct, at 1.2x the threshold |
+| 4.6 | the 0.014 in column is the worst for every feature set |
+
+All three may become "this is a known property of the dataset, and the method
+still gave the correct call here", with the citation attached.
+
+**There is a second and larger use.** The ball fault is not diagnosed here at
+any diameter, and that is reported as this project's clearest failure. If most
+ball-fault records are not diagnosable by established techniques either, then
+the failure is a property of the data rather than of the method. Say so, and
+say that it does not make the method better - it makes the result *legible*,
+which is what a limitation section is for.
+
+**What must not be written.** Not "outperforms the published benchmark", and
+nothing of that shape.
+
+Section 4.5.1 establishes that in the 1x-to-5x tier a verdict does not survive
+a two percent change in record length. The outer-race 0.014 in call sits at
+1.2x - inside that tier. It is a correct call in the band the report itself
+marks as unreliable. A reviewer who reaches 4.5.1 will see the contradiction,
+and the whole report's credibility rests on exactly the kind of care that
+claim would abandon.
+
+Wording that is both true and stronger:
+
+> This record is reported in the benchmark literature as difficult to diagnose
+> by established techniques. The rule proposed here gives the correct fault
+> location for it, but at 1.2x the decision threshold - inside the tier this
+> work marks as tentative, and shown in 4.5.1 to be unstable against a two
+> percent change in record length. It is therefore offered as a correct call
+> within an interval the method declines to be confident about, not as
+> evidence of improvement over published methods.
+
+That paragraph demonstrates the judgement the report is trying to show. The
+triumphant version demonstrates the opposite.

@@ -4,3 +4,7 @@ __pycache__/
 
 # CWRU records: fetched with src/download_data.py, catalogued in data/FILES.md
 data/*.mat
+
+# Word/PDF renderings of the report - regenerate from the Markdown source
+report/*.docx
+report/*.pdf
