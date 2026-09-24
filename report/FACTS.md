@@ -266,6 +266,23 @@ Compare with the raw spectrum: at BPFI the healthy and inner-race records were
 within 33 percent of each other; after band-passing they differ by a factor of
 24, because the 159.5 Hz machine line is removed before the envelope is taken.
 
+### A numerical coincidence that must be stated, not left for the reader
+
+The inner-race envelope peak is measured at 159.5 Hz. The machine line
+identified in section 3 - the one that makes the raw spectrum unreadable at
+BPFI - is also at 159.5 Hz. They are not the same object, and a reader who
+notices the repetition without being told will suspect contamination.
+
+They cannot be the same. Measured: in the band-passed signal the largest
+amplitude anywhere between 100 and 250 Hz is 2.5e-12, against 1.2e-02 in the
+raw signal - the 2000-4000 Hz band-pass attenuates that line by a factor of
+about 5e9 before the envelope is taken. What remains at 159.5 Hz in the
+envelope spectrum is a rate of amplitude modulation, not a spectral line that
+leaked through.
+
+Say so explicitly in the report. The coincidence is close enough to look like
+an error.
+
 ### Two measurements that do not match the textbook
 
 Sidebands spaced at shaft rate are expected around BPFI, because an inner-race
@@ -475,6 +492,26 @@ between outer race and ball.
 The best segment length depends on which split is being optimised. 2048 was
 used throughout and is best on neither.
 
+### The classifier is not short of physics - it declines to use it
+
+Worth stating, because the obvious reading of the result is wrong. The
+classifier is not failing for want of physical information: six of its nine
+features are the peak ratios at the three geometry-derived fault frequencies
+and their second harmonics, which is precisely the quantity sections 5 and 6
+are built on.
+
+That information does work. Across an unseen fault diameter the envelope
+features alone reach 50.7 percent where the time-domain features reach 33.1.
+But nothing obliges the model to use it, and on the training set identifying
+a record by its tight cluster is both easier and more accurate than comparing
+three peak ratios. It takes the easier route, and the easier route is the one
+that does not survive a new fault size.
+
+The lesson is not "add physics to the features". The physics was in the
+features. The lesson is that an objective which rewards fitting the training
+set will prefer whatever fits it, and a feature's physical meaning gives it no
+standing in that competition.
+
 ### Against the method that does not learn
 
 On the same unseen diameters, the section 6 rule diagnoses all six race
@@ -485,6 +522,15 @@ measuring a frequency that geometry predicts does.
 ---
 
 ## 8. Figure and table inventory
+
+**Every figure placed in the report must be taken from `figures/` as it stands
+now, not from any earlier copy.** `fig01_waveforms.png` was regenerated on
+2026-09-24 after the committed version was found to have been saved while the
+notebook's exercise parameter was still set: it showed 0.02 s under a title
+and a body text claiming 0.2 s and about 21 impulse bursts. The corrected file
+is 225,645 bytes; the broken one is 192,504. If a build embeds an image whose
+bytes do not match the repository, it is stale.
+
 
 | file | notebook | shows |
 |---|---|---|
@@ -815,9 +861,23 @@ Where to recover it:
 | | |
 |---|---|
 | Appendix B | 40 rows to 5, per 10.3 |
-| Figures | 15 to 12, cutting fig04b, then fig03a, then fig07c |
+| Figures | **keep all 15** - see below |
 | Method | keep near its 900-word budget; envelope theory needs two sentences, and the space belongs to section 3.4 |
 | **Discussion** | **do not compress** - this is the section that distinguishes the work |
+
+**On the figure count, reversing an earlier instruction.** An earlier version
+of this sheet said to cut from fifteen figures to twelve, dropping fig04b,
+then fig03a, then fig07c. That was a page-budget heuristic applied without
+checking what each figure carries, and review was right to push back on it.
+Each of the three is the only illustration of its own argument: fig04b is the
+band energy as a time series, which is the carrier-and-modulation idea made
+visible; fig03a is the only picture of the energy sitting where the fault
+frequency is not; fig07c is the only explanation of why the classifier
+collapses rather than merely that it does.
+
+**Keep all fifteen.** A figure that carries an argument is not padding, and
+cutting one to save a page trades the argument for the page. Recover length
+from prose if it is needed.
 
 ### 10.6 Both language versions draw from this sheet
 
