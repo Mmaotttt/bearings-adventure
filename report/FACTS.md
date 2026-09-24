@@ -782,53 +782,94 @@ here so both language versions make the same ones.
 ### 10.1 Author block
 
     Bearing fault diagnosis from vibration spectra
-    Chengzhe Kong
+    Chengzhe KONG
     Wuhan University of Technology
     September 2026
     github.com/Mmaotttt/bearings-adventure
 
-Romanised given-name-first, which is the convention for applications to
-European institutions. **It must match the passport spelling exactly** - if
-the passport reads `KONG CHENGZHE`, either order is acceptable but the
-spelling is not negotiable, because this document will be filed and searched
-against the application form.
+The passport reads `KONG CHENGZHE`. Given-name-first is the convention for
+applications to European institutions, and the spelling is identical either
+way, so both orders are acceptable - **the family name in capitals is the
+small improvement**: `Chengzhe KONG` keeps the European order while leaving
+no doubt which name is the surname, and a reader matching this against a
+passport or an application form has nothing to guess.
 
-`Wuhan University of Technology` is the institution's own English name; do not
-translate it differently.
+`Wuhan University of Technology` is the institution's own English name; do
+not translate it differently.
 
 ### 10.2 The internship, in section 1
 
-Taken from the internship certificate, which supersedes what was said from
-memory - the employer is an electrical company, not a robotics one:
+**Settled 2026-09-25 against the certificate, after a conflict with a company
+registry lookup. The certificate governs.**
 
 | | |
 |---|---|
-| Employer | 武汉京天电器有限公司 - Wuhan Jingtian Electric Co., Ltd. (Wuhan, China) |
+| Employer of record | **武汉京天电器有限公司** |
 | Dates | 13 July 2026 to 24 July 2026 |
 | Duration | 12 calendar days, Monday to Friday twice: **two working weeks** |
 | Department | Technical Department |
 | Role | Robot test engineer |
 
-**Confirm the registered English name before submitting.** The form above is
-a transliteration of the Chinese name; the company's own English name, if it
-has one, is what should appear. The logo reads `JING TIAN`.
+#### What the conflict was, and why it is not a conflict
+
+A registry lookup returned 武汉京天机器人有限公司 - "Wuhan Jingtian Robotics
+Co., Ltd." - and a draft was written from it. The certificate says 电器
+(electric), not 机器人 (robotics). Two different registered names cannot both
+be the employer.
+
+The certificate is unambiguous. It carries 武汉京天电器有限公司 in three
+independent places: the filled-in body text, the signature line, and the red
+company seal.
+
+The reason for the apparent mismatch is that they are the same business under
+two names. 武汉京天电器有限公司 was founded in 2010 and operates in robotics
+under the brand 京天博特 / 京天机器人, at jingtianrobots.com: intelligent
+robotics R&D and systems integration, supplying robotics laboratories to
+Chinese universities. The registered name says "electric"; the business is
+robotics. That also explains why the role on the certificate is robot test
+engineer at a company whose name suggests electrical goods, and why the name
+was remembered as the robotics one.
+
+#### What to write
+
+**Whatever appears in the report must be what a reviewer sees on the seal**,
+because the certificate is submitted alongside. So the registered name leads,
+and the brand follows to explain the role:
+
+Chinese version:
+
+> 武汉京天电器有限公司（机器人业务品牌「京天机器人」）
+
+English version - keep the Chinese characters so the reviewer can match the
+seal directly, and mark the English as a rendering rather than a registered
+name, which has not been verified to exist:
+
+> Wuhan Jingtian Electric Co., Ltd. (武汉京天电器有限公司), a robotics firm
+> trading as Jingtian Robotics
+
+**Do not write "Wuhan Jingtian Robotics Co., Ltd." in either version.** It is
+a different registered entity from the one that sealed the document being
+submitted, whatever the relationship between them.
+
+#### The rest of the sentence
 
 **Write the two weeks.** The instinct is to leave the duration out, and it is
 the wrong instinct here. The claim this section makes is not "I did
 substantial work" - it is "this is where the question came from", and two
-weeks is ample for a question to arise. Omitting the duration invites a reader
-who also holds the CV to assume more and then find less, which converts an
-honest origin into an apparent overstatement. A report whose entire posture is
-precision cannot afford to be vague about its one unverifiable sentence.
+weeks is ample for a question to arise. Omitting the duration invites a
+reader who also holds the CV to assume more and then find less. A report whose
+entire posture is precision cannot afford to be vague about its one
+unverifiable sentence.
 
 **The role is better material than the field.** "Robot test engineer" explains
 by itself how one ends up in front of joint teach-and-playback and its sensor
-signals; "a robotics internship" explains nothing and reads as evasive.
+signals; "a robotics internship" explains nothing.
 
 Suggested shape, to be rewritten in the author's own words:
 
 > During a two-week internship as a robot test engineer at Wuhan Jingtian
-> Electric Co., Ltd. in July 2026, working on joint teach-and-playback, I
+> Electric Co., Ltd. (武汉京天电器有限公司), a robotics firm trading as
+> Jingtian Robotics, in July 2026, working on joint teach-and-playback, I
 > found that I could not reason about the sensor signals involved. There is no
 > Signals and Systems course in my curriculum. This project was done alongside
 > self-study to close that gap.
@@ -855,6 +896,20 @@ Traceability is preserved and the captions stay clean.
 
 The outline budgeted 8-12 and the draft reached 21. Page count is not the
 target; what matters is that a reader knows what was found before page three.
+
+**Reconciling this with keeping all fifteen figures, which came later.** The
+two instructions pull against each other and the figures win: a figure that
+carries an argument is not padding. At fifteen figures the draft runs 22
+pages, and that is the honest consequence.
+
+Recover pages from layout, not from content. Several figures are wide and
+short - the statistics comparison, the accuracy-by-split bars, the confusion
+matrices - and can be set at reduced height or paired two to a row without
+losing anything. Prose can tighten. Deleting a figure cannot.
+
+And the page count matters less than what a reader meets first. The abstract
+and section 4.0 already carry the result and the external validation; someone
+who reads two pages has the substance.
 
 Where to recover it:
 
