@@ -636,8 +636,8 @@ DOI below are confirmed and may be cited as written.
 | | status |
 |---|---|
 | Bibliographic details above | **verified** against CrossRef |
-| The substance below | **corroborated by secondary sources, not read in the original** |
-| Any direct quotation | **not verified - do not quote** |
+| The substance below | **superseded - the paper has since been read; see section 11** |
+| Any direct quotation | transcribed from page images, not copy-paste; see 11.1 |
 
 Attempted on 2026-09-24 and failed: ScienceDirect returned a bot-check page
 rather than the PDF (the saved `init.htm` was that challenge page, containing
@@ -836,3 +836,191 @@ written into a notebook as well as into the catalogue.
 against the 2026-09-21 sheet and its numbers are stale, but it records the
 inconsistencies that review found, which is part of how the report was built.
 Its header says so. Do not quote from it.
+
+---
+
+## 11. The benchmark study, read
+
+Smith & Randall (2015) was read on 2026-09-24 from the published PDF. The
+12 k drive-end tables are **A2** (p. 126) and **B2** (p. 128); the tables
+supplied earlier, A4 and B4, are the fan-end ones and are not relevant here.
+
+### 11.1 How reliable each part of this is
+
+The paper could not be copied as text, so it was read as page images and
+transcribed by hand. That leaves two different confidence levels, and they
+must be treated differently:
+
+| | confidence | why |
+|---|---|---|
+| Table B2's kurtosis values | **high** | independently cross-checked, see 11.2 |
+| Prose quotations | transcribed, unconfirmed | nothing checks them |
+
+**Quotations below may be used as paraphrase with a page citation. Before any
+of them is printed inside quotation marks, check it against the PDF.**
+
+Pages 102-103 and 105-128 were read in full; 101 and 104 only skimmed;
+Tables B3/B4 and the references were not opened. So this section is what the
+paper says about the drive-end data, not everything it says.
+
+### 11.2 An external check on this project's own numbers
+
+Table B2 publishes a kurtosis for every record. This project computed the
+same quantity independently, before the paper was available, and the values
+were not known to whoever transcribed the table.
+
+**All 36 drive-end fault records agree.**
+
+| | |
+|---|---|
+| Median difference | **0.06 %** |
+| Largest difference | **0.3 %** |
+| Records outside 0.5 % | none |
+
+Examples: record 198 reads 2.94 in both; 186 reads 8.84 in both; 223 reads
+9.41 in both; 170 reads 22.08 here against 22.1 printed.
+
+This runs both ways. It confirms the transcription - thirty-six values do not
+agree by accident - and it confirms this project's loading, channel selection
+and kurtosis convention against an external published source. **Worth stating
+in the report: the pipeline is validated against the literature, not only
+self-consistent.**
+
+The four baselines differ by 0.8 to 3.1 percent, and are expected to: the
+paper computes on the native 48 kHz signal, this project on the 12 kHz
+decimation. The direction and size of that difference are consistent with the
+resampling, not with an error.
+
+### 11.3 The diagnosis categories - Table 4, p. 107
+
+| | success | definition (transcribed) |
+|---|---|---|
+| Y1 | yes | clearly diagnosable, classic characteristics in both time and frequency domains |
+| Y2 | yes | clearly diagnosable but non-classic in either or both domains |
+| P1 | partial | probably diagnosable; discrete components at the expected fault frequencies but not dominant |
+| P2 | partial | potentially diagnosable; smeared components appearing to coincide with the expected frequencies |
+| N1 | no | not diagnosable for the specified fault, but other problems identifiable, e.g. looseness |
+| N2 | no | not diagnosable and virtually indistinguishable from noise |
+
+Each cell in Table B2 reads DE/FE/BA. Methods 2 and 3 were run only where
+Method 1 scored P1 or below.
+
+### 11.4 What the paper says about the records this project uses
+
+Published grades for the 1 hp records analysed throughout:
+
+| this project's record | set | kurtosis (both) | paper's grade, DE channel |
+|---|---|---|---|
+| inner 0.007 | 106 | 5.54 | Y2 |
+| inner 0.014 | 170 | 22.1 | Y2 |
+| inner 0.021 | 210 | 7.67 | Y1 |
+| ball 0.007 | 119 | 2.96 | **N1 / N2 / N1** - and listed in Table 6 |
+| ball 0.014 | 186 | 8.84 | P2 |
+| ball 0.021 | 223 | 9.41 | Y2 |
+| outer 0.007 | 131 | 7.60 | Y1 |
+| **outer 0.014** | **198** | **2.94** | **P2 / N2 / N2** |
+| outer 0.021 | 235 | 22.0 | Y2 |
+
+### 11.5 The three places that said "unexplained"
+
+**4.1, the kurtosis of 2.94.** Record 198's kurtosis is 2.94 in the paper too.
+The paper attributes anomalies of this kind not to fault size or speed but to
+the rig's assembly (p. 107, transcribed): the diagnosis outcomes seem to be
+less a function of the fault size or speed and load, and more a function of
+the assembly, which was presumably the same within a fault size and changed
+when a new bearing was installed; the suspected mechanism is mechanical
+looseness whose severity changed with each installation. It repeats the point
+at p. 110 and p. 124.
+
+So the anomaly stops being unexplained: it is a documented property of this
+rig, and this project reproduced the number exactly.
+
+**4.5, the outer-race 0.014 in call at 1.2x threshold.** The sentence reported
+earlier does appear, on p. 110, but its scope is narrower than it looked - it
+sits in the section on outer-race faults centred in the load zone, so "the
+next four series" means records 197 to 200, which is exactly this project's
+0.014 in outer-race group. The paper's own grade for 198 is P2 at best, on
+the drive-end channel with Method 1, and N2 with Methods 2 and 3.
+
+**The honest framing, which is also the stronger one:** two independent
+marginal assessments agree that this record is hard. The benchmark grades it
+potentially diagnosable at best; the rule proposed here returns the correct
+fault location but at 1.2x its threshold, inside the tier 4.5.1 shows to be
+unstable against a two percent change in record length. Neither is a
+confident diagnosis, and they agree about that.
+
+Still not to be written: anything of the shape "outperforms the published
+benchmark". See 9.6.
+
+**One inconsistency inside the paper, worth noting rather than resolving.**
+The p. 110 text says data set 197 is the only 0.014 in case with a partial
+diagnosis, while Table B2 also shows P2 for 198 and P1 for 199 on the
+drive-end channel under Method 1. Report it as an observation if it comes up;
+do not try to explain it.
+
+**4.6, the 0.014 in column being worst for every feature set.** Same
+explanation: assembly rather than fault size, per p. 107.
+
+### 11.6 The ball fault - the failure is corroborated
+
+This project does not diagnose the ball fault at any diameter. The paper
+reaches the same place by different routes:
+
+- **Table 5** lists records that give classical symptoms with at least one
+  method. The ball column is empty for all three groups - 12 k drive end,
+  48 k drive end and 12 k fan end. No ball fault anywhere earns a Y1.
+- **Table 6** lists records not diagnosable by any applied method. For 12 k
+  drive-end ball faults it includes **118 and 119**. Record 119 is this
+  project's ball 0.007 in at 1 hp - the record the rule declined to call.
+- p. 108, transcribed: the ball fault cases are certainly the most difficult
+  to diagnose, with only a few showing the classic envelope-spectrum symptoms;
+  the only sets diagnosable by direct envelope analysis of the raw signal are
+  from the 0.021 in and 0.028 in faults.
+- p. 115 and p. 119 repeat the finding for the 48 k drive-end and 12 k fan-end
+  data.
+
+**This is the single most useful thing the citation does for the report.** The
+clearest negative result here - detection without diagnosis on the ball fault
+- is a property of the data that three established techniques also failed to
+overcome. It does not make the method better. It makes the failure legible,
+which is what a limitations section is for.
+
+Note the direction of agreement on record 119 specifically: the rule declined
+to diagnose it, and the benchmark found it not diagnosable. A method that
+refuses where the literature also fails is behaving correctly.
+
+### 11.7 The data defects, against the paper
+
+**(a) The 48 kHz baselines: confirmed.** Table A1's caption (p. 126) states
+48 kHz for the normal baseline data, and section 3.2 (p. 103) groups the whole
+dataset by sample rate. This project established the same thing from three
+machine lines before the paper was available. Keep the derivation in the
+report - it is how the fact was found - and cite the paper as confirmation.
+
+**(b) File 99's duplicated channel: not in the paper.** Table 3, "Records
+affected by data acquisition problems" (p. 106), lists corrupted, clipped and
+duplicated records - including five where the drive-end and fan-end
+measurements are identical up to a scale factor of about 1.0154 - but neither
+98 nor 99 appears in it. State this factually: not listed in the benchmark
+study's table of acquisition problems. Nothing stronger.
+
+**An inference that does not hold, recorded so it is not made again.** The
+paper prints 2.93 for both 98 and 99, which looks like evidence that it too
+read the duplicated channel. It is not. Computed on the native 48 kHz signal,
+file 99's genuine `X099_DE_time` gives 2.9251 and the duplicate
+`X098_DE_time` gives 2.9306. Both round to 2.93, so the printed values cannot
+distinguish which was read.
+
+**(c) File 97's 5.08 s duration: not addressed** in the pages read.
+
+### 11.8 Where this belongs in the report
+
+| section | what changes |
+|---|---|
+| Abstract | add the external validation: all 36 kurtosis values agree with the published benchmark to within 0.3 percent |
+| 2, Data | cite the paper as confirmation of the 48 kHz baselines; note 98/99 is not in its Table 3 |
+| 4.1 | the 2.94 is reproduced exactly; the anomaly is assembly, per p. 107 |
+| 4.5 | 197-200 not diagnosable by the benchmark's techniques; both assessments marginal and agreeing |
+| 4.6 | same assembly explanation |
+| 5.2, Limitations | the ball fault: Table 5 empty, Table 6 lists 119, the method declined on 119 |
+| new, or in 4 | the 36-record cross-check as a validation of the pipeline |

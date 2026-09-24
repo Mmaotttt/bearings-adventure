@@ -120,7 +120,8 @@ shows, what the number is, what it rules out.
 
 | subsection | figures | the point |
 |---|---|---|
-| 4.1 Time domain | 1, 2 + table 1 | ~21 bursts against BPFO x 0.2 s = 21.2; healthy kurtosis 2.98 against the Gaussian 3; ball fault invisible to two statistics of three |
+| 4.0 Validation | - | all 36 kurtosis values agree with the published benchmark to within 0.3 percent - the pipeline checked against the literature, not only against itself (FACTS 11.2) |
+| 4.1 Time domain | 1, 2 + table 1 | ~21 bursts against BPFO x 0.2 s = 21.2; healthy kurtosis 2.98 against the Gaussian 3; ball fault invisible to two statistics of three; the 0.014 in outer-race anomaly is the rig's assembly, per the benchmark (FACTS 11.5) |
 | 4.2 Raw spectrum | 3a, 3b | energy at 2-4 kHz, not at the fault frequency; the BPFI peak present in the healthy record too |
 | 4.3 Time-frequency | 4a, 4b, 4c | periodic striping; the band energy as a time series, which is the envelope in crude form; 601 at BPFO; the ball fault's band is bright but unmodulated |
 | 4.4 Envelope spectrum | 5a, 5b | 635 and 237, errors under 0.5 percent, five harmonics; healthy floor 4.3 / 9.7 / 2.2 |
@@ -154,7 +155,10 @@ Write at least these, each in a sentence or two:
 2. Faults are single points cut by EDM, not the spalling that real bearings
    develop.
 3. The ball fault is not diagnosed at any diameter. Its band is energetic but
-   unmodulated - detection without diagnosis.
+   unmodulated - detection without diagnosis. The benchmark study reaches the
+   same conclusion by other means: no ball fault in the whole dataset earns
+   its top grade, and record 119 - the one declined here - is on its list of
+   records not diagnosable by any applied technique (FACTS 11.6).
 4. One false positive in nine, and the threshold cannot separate it from the
    only marginally correct record.
 5. The classifier was not tested across speed regimes far from these four, nor
