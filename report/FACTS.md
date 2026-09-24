@@ -640,9 +640,34 @@ DOI below are confirmed and may be cited as written.
 | Any direct quotation | **not verified - do not quote** |
 
 Attempted on 2026-09-24 and failed: ScienceDirect returned a bot-check page
-rather than the PDF (the saved `init.htm` is that challenge page, containing
-no article text), and ResearchGate returned 403. The status above therefore
-stands unchanged. Routes still open: a university IP or VPN, the library's
+rather than the PDF (the saved `init.htm` was that challenge page, containing
+no article text), and ResearchGate returned 403.
+
+**Two tables were then supplied - A4 and B4 - and they are the wrong ones.**
+Both are captioned *12 k fan end*: `Table A4, 12 k fan end bearing fault
+data` and `Table B4, 12 k fan end bearing fault analysis results`. Their data
+set numbers run 270 to 318. This project uses the 12 k **drive end** set -
+105-108, 118-121, 130-133, 169-172, 185-188, 197-200, 209-212, 222-225,
+234-237 - which appears nowhere in them. Nothing in A4 or B4 can be cited in
+support of any claim about the records used here.
+
+**What is needed instead**, and all three are still outstanding:
+
+| | why |
+|---|---|
+| the A-table captioned *12 k drive end bearing fault data* | to map data set numbers to conditions for our records |
+| its B-table counterpart, *12 k drive end ... analysis results* | the kurtosis and diagnosis category per record |
+| Section 6.2 | it defines Y1 / Y2 / P1 / P2 / N1 / N2; without it the categories cannot be read |
+
+**One observation from the fan-end tables, which is suggestive and is not
+evidence.** In B4 the inner-race and outer-race-centred blocks carry many Y
+ratings, while the ball-fault block (sets 282-293) is dominated by P and N
+with no Y in the first method's column. That is the same shape as this
+project's own result - races diagnosed, ball faults not - but it is a
+different bearing at a different measurement point, so it may be mentioned
+only as a remark, never as support.
+
+Routes still open for the paper: a university IP or VPN, the library's
 interlibrary request, or emailing the authors, who are at the School of
 Mechanical and Manufacturing Engineering, UNSW.
 
@@ -727,27 +752,40 @@ translate it differently.
 
 ### 10.2 The internship, in section 1
 
-Two weeks, at Wuhan Jingtian Robotics (Wuhan, China), working on joint
-teach-and-playback.
+Taken from the internship certificate, which supersedes what was said from
+memory - the employer is an electrical company, not a robotics one:
+
+| | |
+|---|---|
+| Employer | 武汉京天电器有限公司 - Wuhan Jingtian Electric Co., Ltd. (Wuhan, China) |
+| Dates | 13 July 2026 to 24 July 2026 |
+| Duration | 12 calendar days, Monday to Friday twice: **two working weeks** |
+| Department | Technical Department |
+| Role | Robot test engineer |
+
+**Confirm the registered English name before submitting.** The form above is
+a transliteration of the Chinese name; the company's own English name, if it
+has one, is what should appear. The logo reads `JING TIAN`.
 
 **Write the two weeks.** The instinct is to leave the duration out, and it is
-the wrong instinct here. The motivation section's claim is not "I did
+the wrong instinct here. The claim this section makes is not "I did
 substantial work" - it is "this is where the question came from", and two
 weeks is ample for a question to arise. Omitting the duration invites a reader
-who also has the CV to assume more and then find less, which converts an
-honest origin story into an apparent overstatement. A report whose entire
-posture is precision cannot afford to be vague about its one unverifiable
-sentence.
+who also holds the CV to assume more and then find less, which converts an
+honest origin into an apparent overstatement. A report whose entire posture is
+precision cannot afford to be vague about its one unverifiable sentence.
+
+**The role is better material than the field.** "Robot test engineer" explains
+by itself how one ends up in front of joint teach-and-playback and its sensor
+signals; "a robotics internship" explains nothing and reads as evasive.
 
 Suggested shape, to be rewritten in the author's own words:
 
-> During a two-week internship at Wuhan Jingtian Robotics, working on joint
-> teach-and-playback, I found that I could not reason about the sensor signals
-> involved. There is no Signals and Systems course in my curriculum. This
-> project was done alongside self-study to close that gap.
-
-**Confirm the company's registered English name** before submitting; the form
-above is a transliteration, not necessarily what the company calls itself.
+> During a two-week internship as a robot test engineer at Wuhan Jingtian
+> Electric Co., Ltd. in July 2026, working on joint teach-and-playback, I
+> found that I could not reason about the sensor signals involved. There is no
+> Signals and Systems course in my curriculum. This project was done alongside
+> self-study to close that gap.
 
 ### 10.3 Appendix B - trim the verification output
 
