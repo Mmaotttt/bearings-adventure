@@ -8,3 +8,7 @@ data/*.mat
 # Word/PDF renderings of the report - regenerate from the Markdown source
 report/*.docx
 report/*.pdf
+
+# Saved web pages (a ScienceDirect bot-check page landed here once)
+*.htm
+*.html

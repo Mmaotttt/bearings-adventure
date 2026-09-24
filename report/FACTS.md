@@ -639,6 +639,13 @@ DOI below are confirmed and may be cited as written.
 | The substance below | **corroborated by secondary sources, not read in the original** |
 | Any direct quotation | **not verified - do not quote** |
 
+Attempted on 2026-09-24 and failed: ScienceDirect returned a bot-check page
+rather than the PDF (the saved `init.htm` is that challenge page, containing
+no article text), and ResearchGate returned 403. The status above therefore
+stands unchanged. Routes still open: a university IP or VPN, the library's
+interlibrary request, or emailing the authors, who are at the School of
+Mechanical and Manufacturing Engineering, UNSW.
+
 The substance, as reported by sources citing the study: Smith and Randall
 applied three established diagnostic techniques to the whole CWRU dataset and
 graded every record by how diagnosable it proved. Relatively few records gave
@@ -693,3 +700,101 @@ Wording that is both true and stronger:
 
 That paragraph demonstrates the judgement the report is trying to show. The
 triumphant version demonstrates the opposite.
+
+---
+
+## 10. Decisions for the write-up
+
+Settled 2026-09-24. These are not measurements; they are choices, recorded
+here so both language versions make the same ones.
+
+### 10.1 Author block
+
+    Bearing fault diagnosis from vibration spectra
+    Chengzhe Kong
+    Wuhan University of Technology
+    September 2026
+    github.com/Mmaotttt/bearings-adventure
+
+Romanised given-name-first, which is the convention for applications to
+European institutions. **It must match the passport spelling exactly** - if
+the passport reads `KONG CHENGZHE`, either order is acceptable but the
+spelling is not negotiable, because this document will be filed and searched
+against the application form.
+
+`Wuhan University of Technology` is the institution's own English name; do not
+translate it differently.
+
+### 10.2 The internship, in section 1
+
+Two weeks, at Wuhan Jingtian Robotics (Wuhan, China), working on joint
+teach-and-playback.
+
+**Write the two weeks.** The instinct is to leave the duration out, and it is
+the wrong instinct here. The motivation section's claim is not "I did
+substantial work" - it is "this is where the question came from", and two
+weeks is ample for a question to arise. Omitting the duration invites a reader
+who also has the CV to assume more and then find less, which converts an
+honest origin story into an apparent overstatement. A report whose entire
+posture is precision cannot afford to be vague about its one unverifiable
+sentence.
+
+Suggested shape, to be rewritten in the author's own words:
+
+> During a two-week internship at Wuhan Jingtian Robotics, working on joint
+> teach-and-playback, I found that I could not reason about the sensor signals
+> involved. There is no Signals and Systems course in my curriculum. This
+> project was done alongside self-study to close that gap.
+
+**Confirm the company's registered English name** before submitting; the form
+above is a transliteration, not necessarily what the company calls itself.
+
+### 10.3 Appendix B - trim the verification output
+
+Keep the four baseline rows and the final assertion line; add one sentence
+saying the full 40-row output is in the repository. The four baselines are
+where all three data defects live, so the evidence is concentrated there and
+the remaining 36 rows only repeat the confirmation. This recovers close to a
+page.
+
+### 10.4 Figure captions - no filenames
+
+Drop the grey filename from each caption. Put one sentence before the figure
+list instead:
+
+> Figures are named `figXXy_*.png` in the repository, numbered by the stage
+> that produced them.
+
+Traceability is preserved and the captions stay clean.
+
+### 10.5 Length - aim at fourteen pages, not twenty-one
+
+The outline budgeted 8-12 and the draft reached 21. Page count is not the
+target; what matters is that a reader knows what was found before page three.
+
+Where to recover it:
+
+| | |
+|---|---|
+| Appendix B | 40 rows to 5, per 10.3 |
+| Figures | 15 to 12, cutting fig04b, then fig03a, then fig07c |
+| Method | keep near its 900-word budget; envelope theory needs two sentences, and the space belongs to section 3.4 |
+| **Discussion** | **do not compress** - this is the section that distinguishes the work |
+
+### 10.6 Both language versions draw from this sheet
+
+Changes go into this file first, and both drafts are updated from it. Not
+"change the Chinese and tell the English".
+
+Three of the ten queries that came back from drafting - the RMS pair, the 2331
+segments, 237 against 236.9 - were all the same failure: one quantity written
+down in two places, drifting apart. The remedy is one place, not more careful
+copying. The same failure took down notebook 06 when six filenames were
+written into a notebook as well as into the catalogue.
+
+### 10.7 The superseded draft
+
+`REPORT_zh_draft_v1_superseded.md` is kept rather than deleted. It was written
+against the 2026-09-21 sheet and its numbers are stale, but it records the
+inconsistencies that review found, which is part of how the report was built.
+Its header says so. Do not quote from it.
