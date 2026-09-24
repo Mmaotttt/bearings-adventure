@@ -292,6 +292,15 @@ pair is weak (8.8 and 12.7) while +/-2 is strong (98.7 and 50.8), and the
 outer race carries shaft-rate sidebands it is not supposed to have (106.1 and
 113.4). Reported as an unexplained observation.
 
+**The two departures are not of the same kind, and must not be written as
+though they were.** For the inner race the expected sidebands are present -
+98.7 and 50.8 are substantial - but weighted toward two shaft rates rather
+than one, so the expectation is met and the spacing pattern is not what the
+textbook describes. For the outer race sidebands appear where the textbook
+predicts none, which is a straight contradiction. Writing "the opposite in
+both cases" overstates the first: the inner race is not missing its
+sidebands.
+
 Omitting the envelope's mean leaves a DC peak 2.3 times the BPFO peak - not
 the catastrophe usually described, but enough to halve every real peak on an
 autoscaled axis and to defeat any automatic peak search.
@@ -522,6 +531,16 @@ measuring a frequency that geometry predicts does.
 ---
 
 ## 8. Figure and table inventory
+
+**One quantity, one name.** The non-blind reference used in section 3.4 -
+scoring each band at the fault frequency that is actually present, which
+requires knowing the answer - is called *the best achievable peak ratio* in
+the text and in the retention table. Figure 11's caption in both drafts calls
+it *the cheating upper bound*, a name that appears nowhere else and is never
+defined. Use the first name in the caption too, or define the second where it
+first appears. A reader meeting an undefined informal term in a caption has to
+guess whether it is a third thing.
+
 
 **Every figure placed in the report must be taken from `figures/` as it stands
 now, not from any earlier copy.** `fig01_waveforms.png` was regenerated on
@@ -1051,10 +1070,24 @@ So the anomaly stops being unexplained: it is a documented property of this
 rig, and this project reproduced the number exactly.
 
 **4.5, the outer-race 0.014 in call at 1.2x threshold.** The sentence reported
-earlier does appear, on p. 110, but its scope is narrower than it looked - it
-sits in the section on outer-race faults centred in the load zone, so "the
-next four series" means records 197 to 200, which is exactly this project's
-0.014 in outer-race group. The paper's own grade for 198 is P2 at best, on
+earlier does appear, on p. 110, and its scope is narrower than it looked: it
+sits in the section on outer-race faults centred in the load zone.
+
+**Which records "the next four series" denotes is an identification, not
+something the paper spells out** - an earlier version of this sheet stated it
+as though the paper listed them, which it does not. The identification is
+nevertheless well supported: the section covers outer-race faults centred in
+the load zone, whose 0.014 in group is exactly four records at four loads,
+197 to 200; and the adjacent sentence on the same page names data set 197 as
+the only 0.014 in case in that section with a partial diagnosis, which places
+197 inside the group being discussed.
+
+**Write it as an identification.** Not "the next four series of data - sets
+197 to 200 - could not be diagnosed", which reads as though the paper printed
+the numbers. Rather: the paper states that the next four series for that
+fault size could not be diagnosed by any technique applied ([3], p. 110); in
+that section those are sets 197 to 200, this project's 0.014 in outer-race
+group. One clause, and the claim becomes exactly as strong as its evidence. The paper's own grade for 198 is P2 at best, on
 the drive-end channel with Method 1, and N2 with Methods 2 and 3.
 
 **The honest framing, which is also the stronger one:** two independent
