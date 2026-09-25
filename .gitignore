@@ -5,9 +5,14 @@ __pycache__/
 # CWRU records: fetched with src/download_data.py, catalogued in data/FILES.md
 data/*.mat
 
-# Word/PDF renderings of the report - regenerate from the Markdown source
+# Word/PDF renderings of the report are build products - all but the one that
+# is actually submitted, which belongs here so a visitor can read it.
 report/*.docx
 report/*.pdf
+!report/Bearing_fault_diagnosis_Chengzhe_KONG.pdf
+
+# Word's lock files
+~$*
 
 # Saved web pages (a ScienceDirect bot-check page landed here once)
 *.htm

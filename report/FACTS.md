@@ -1183,6 +1183,14 @@ repository. Recorded so that a later regeneration can be held to the same bar.
 Files: `Bearing_fault_diagnosis_Chengzhe_KONG.docx` / `.pdf` and
 `轴承故障诊断报告_中文终版.docx` / `.pdf`.
 
+**The English PDF is committed to the repository** and linked from the README,
+so a visitor reads the report without being asked to build it. Everything else
+under `report/` that is a build product stays ignored - the other renderings,
+the Word sources, and Word's lock files. Only the file that is actually
+submitted is tracked. The Chinese PDF is deliberately not tracked: the
+repository and its README are in English, and offering two reports leaves a
+reader deciding which one to open.
+
 | check | result |
 |---|---|
 | Numeric tokens traceable to this sheet | **294 of 294**, both versions |
@@ -1212,11 +1220,11 @@ Both documents end at the references.
 
 ### Still open, and not blocking
 
-- **Page count of the English version has not been measured.** Neither file
-  records a page count in its properties. The Chinese version is 22 pages;
-  English typesetting of the same content will differ. Worth opening and
-  checking before submission, not because a number must be hit but because
-  the author should know it.
+- ~~Page count of the English version has not been measured.~~ **Measured:
+  20 pages**, against the Chinese version's 22. Fifteen figures and fifteen
+  tables in twenty pages, which is about the density the material needs. The
+  earlier fourteen-page target was set before the figure question was settled
+  and is superseded by 10.5.
 - **The benchmark paper's prose is still transcription, not copy-paste.** The
   citation rule in Appendix D holds: paraphrase with a page number, nothing
   inside quotation marks. Section 11.1 says what would license changing that.

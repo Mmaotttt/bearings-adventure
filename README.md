@@ -9,6 +9,10 @@ Center](https://engineering.case.edu/bearingdatacenter): a healthy baseline
 plus outer-race, inner-race and ball faults at three fault diameters, each at
 four motor loads. No hardware, no simulated signals.
 
+**[The report (PDF, 20 pages)](report/Bearing_fault_diagnosis_Chengzhe_KONG.pdf)** — the
+write-up this repository supports, with every figure below in place and the
+failures argued rather than omitted.
+
 ## What came out
 
 **The fault frequency is not where a spectrum looks for it.** In the
