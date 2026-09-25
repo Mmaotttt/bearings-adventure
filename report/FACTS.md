@@ -884,7 +884,12 @@ unverifiable sentence.
 by itself how one ends up in front of joint teach-and-playback and its sensor
 signals; "a robotics internship" explains nothing.
 
-Suggested shape, to be rewritten in the author's own words:
+**SUPERSEDED 2026-09-25 by section 13.** The paragraph below is kept only
+as a record of what was withdrawn and why; do not write from it. Section 13
+holds the approved text. The employer, role and duration sentence above is
+unaffected and still governs.
+
+Retired shape:
 
 > During a two-week internship as a robot test engineer at Wuhan Jingtian
 > Electric Co., Ltd. (武汉京天电器有限公司), a robotics firm trading as
@@ -1177,6 +1182,10 @@ distinguish which was read.
 
 ## 12. Final audit, 2026-09-25
 
+> **Superseded in part by 13.7.** Section 1 was rewritten later the same day
+> and both versions rebuilt. The checks below were re-run against the rebuild
+> and all still hold; the page counts changed to 20 English and 21 Chinese.
+
 Both submission versions were checked against this sheet and against the
 repository. Recorded so that a later regeneration can be held to the same bar.
 
@@ -1232,3 +1241,183 @@ Both documents end at the references.
   verified to exist.** The English version renders it as Wuhan Jingtian
   Electric Co., Ltd. and prints the Chinese characters beside it, so a
   reviewer can match the seal regardless.
+
+---
+
+## 13. Section 1, rewritten from the interview - 2026-09-25
+
+**This section supersedes the "Suggested shape" paragraph at the end of 10.2.**
+Everything else in 10.2 stands: the employer name, the two weeks, the role,
+and the rule that the registered name leads and the brand follows.
+
+The retired framing was *"working on joint teach-and-playback, I found that I
+could not reason about the sensor signals involved."* It is withdrawn because
+it is not true in the way it reads. It implies signals were in front of me and
+I could not interpret them. There were no signals in front of me. The retired
+sentence also says "sensor signals" without naming one, which is the vagueness
+that prompted the rewrite.
+
+### 13.1 What actually happened, established by interview
+
+Recorded because none of it was previously on this sheet, and the section 1
+prose is now traceable to it.
+
+| | |
+|---|---|
+| The task | A humanoid robot writing calligraphy with a brush, on a table |
+| The method | Teach-and-playback |
+| How teaching was done | The arm's torque was released so a person could hold its hand and write the character once |
+| What was recorded | The joint angles of the **arm** only |
+| What was not recorded | Waist and leg joint angles - so the stance had to be watched during teaching and not allowed to drift or step |
+| What stayed active | Whole-body motion control, holding the standing posture, balance and disturbance rejection |
+| Force or pressure sensing | **None on the machine** |
+| The failure mode | Replayed strokes too thick, too thin, or the brush not reaching the paper - stroke weight, not trajectory shape |
+| Gravity compensation | Written by us, fixed to the single working height, since the writing only ever happened on one table |
+| Repeatability measures | Paper taped to a table at a fixed height; brush tip worked back to the same condition before each attempt |
+| Takes per character | **Seven or eight**, best one kept |
+| The context | A demonstration piece, not an industrial task, under a short schedule |
+
+### 13.2 Why the strokes came out wrong - the explanation the prose rests on
+
+During teaching the person's hand is the closed loop. The brush touches the
+paper, the person feels it, and the height is corrected continuously. So the
+pressure was never a commanded quantity; it was the output of a loop that was
+not itself recorded. What entered the record was the joint angles *after* the
+correction.
+
+On playback the person is out of the loop and the angles are replayed as
+given. Sub-millimetre discrepancies - the paper's height, the table, the
+robot's own tracking, the bristles after re-inking - pass through the brush,
+which acts as a mechanical amplifier, and come out as stroke weight. Gravity
+compensation removes a static load; it says nothing about contact.
+
+### 13.3 The reading this licenses, and the reading it does not
+
+**It does not license:** that signal processing would have solved this, or
+that I was looking at a signal I could not read. The author's own correction,
+recorded verbatim in substance: even having taken Signals and Systems, he
+would probably not have thought to go and read that joint-angle series. The
+task would have gone better with force feedback; that is the whole of it.
+
+**It does license:** that the entire solution contains no measurement. Every
+one of the fixes - taping the paper, conditioning the brush, watching the
+stance, hard-coding the compensation height, seven or eight takes - works by
+making the world repeatable rather than by sensing what the machine is doing.
+That was a sound trade-off under the constraints and it finished the job. But
+it is one half of engineering, and the missing half is what this project is
+practice for.
+
+The closing sentence is the point of the whole section and is to be kept as
+written: what stayed with the author was not that he could not read a signal,
+but that it had not occurred to him to want one.
+
+### 13.4 The settled first paragraph
+
+Chinese - **final, approved 2026-09-25**:
+
+> 实习时我参与的项目是让一台人形机器人在桌上写毛笔字，用的是示教复现：把手臂的力矩单独释放开，人扶着它的手把字写一遍，记录手臂各关节的角度，之后回放。扶着写出来的字是正常的，回放出来的常常不是——同一条笔画时而过粗、时而过细，有时笔根本碰不到纸。落笔的轻重从来没有被测量过，机器上没有力传感器；示教时“压多深”是人手一边感觉一边纠的，进入记录的只有纠正之后的关节角度。我们的办法是把环境里的不确定性一个个消掉：纸用胶带固定在等高的桌面上，每次落笔前把笔锋理到同样的状态，示教时留意机器人整体站姿不能漂移（腰和腿的关节角度并不在记录里），重力补偿因为只在固定高度写字，就按固定高度写死。一个字录七八遍，挑最好的一条留下。这在当时是合理的：那是个演示任务而不是工业任务，时间有限，这条粗糙的路线能把事情做成，也确实做成了。但回头看，整件事里没有任何一处是“测量”——结果是靠把世界变得可重复换来的。让我后来一直记着的，不是我读不懂哪个信号，而是我压根没想到要去要一个信号。
+
+English - the same paragraph, not a looser retelling:
+
+> The project I worked on there was getting a humanoid robot to write
+> calligraphy with a brush on a table, by teach-and-playback: the arm's torque
+> was released, a person held its hand and wrote the character once, the arm's
+> joint angles were recorded, and the robot replayed them. The character we
+> wrote by hand came out normally; the replayed one often did not - the same
+> stroke too thick, or too thin, and sometimes the brush never reached the
+> paper. The weight of a stroke had never been measured, because there was no
+> force sensor on the machine. How hard to press is something a hand corrects
+> continuously by feel, and what entered the record was the joint angles after
+> the correction, not the correcting. So we removed the uncertainty from the
+> environment one source at a time: the paper taped to a table at a fixed
+> height, the brush tip worked back to the same condition before each attempt,
+> the stance watched so that it did not drift, since the waist and leg angles
+> were not recorded, and the gravity compensation, which we wrote ourselves,
+> fixed to that one working height because the writing only ever happened
+> there. Seven or eight takes per character, and the best one kept. It was a
+> reasonable call: a demonstration rather than an industrial task, the time was
+> short, and the crude route finished the job, which it did. But nothing in it
+> was a measurement - the result was bought by making the world repeatable.
+> What stayed with me was not that I could not read some signal, but that it
+> had not occurred to me to want one.
+
+The employer-and-role sentence from 10.2 precedes this paragraph. It is the
+one sentence in the report a reviewer checks against the certificate, so it
+keeps its own place and is not folded into the narrative.
+
+### 13.5 The second paragraph - the three constraints are withdrawn
+
+**Decided 2026-09-25.** The outline's second paragraph asked for three stated
+choices: a benchmark dataset so results can be checked, a fault type whose
+frequencies follow from geometry, and a scope ending at a decision rule rather
+than a leaderboard number.
+
+Written as three principles it reads as though the dataset had been assigned
+and the justification composed afterwards - a target drawn around a shot
+already fired. It is also the least personal writing in the report, sitting
+directly after the most personal.
+
+**The replacement is causal rather than declarative.** There is one real
+constraint - no equipment, no machine, self-taught with nobody to say whether
+an answer was wrong - and the rest follows from it. Written that way it is a
+person reasoning, not a person justifying, and it is true.
+
+Text, **approved 2026-09-25**:
+
+> 我没有设备，也没有一台真实的机器可以拆。这一条决定了后面几乎所有事：数据只能用公开的；而既然是自学、身边没有人能告诉我做错了没有，那就得挑一个别人已经发表过结果的数据集，这样我至少能拿自己算出来的东西去对一对。同样的理由让我选了滚动轴承——它的故障频率可以从几何尺寸直接算出来，也就是说在动手之前就存在一个“答案应该是多少”，而不是只能等数据告诉我答案。
+
+> I had no equipment and no real machine to take apart. That one constraint
+> decided most of what followed. The data had to be public; and since I was
+> teaching myself, with nobody beside me to say whether an answer was wrong, it
+> had to be a dataset other people had published results on, so that I could at
+> least hold my own numbers against theirs. The same reasoning chose rolling
+> bearings: the fault frequencies follow from the geometry, which means that
+> before touching the data there is already an answer the data ought to give,
+> rather than only an answer the data will supply.
+
+This paragraph is what section 4.0 then discharges: the kurtosis cross-check
+against the benchmark (11.2) is literally the "hold my own numbers against
+theirs" promise being kept.
+
+The third constraint - scope ending at a decision rule rather than a
+leaderboard number - is **dropped**, not rewritten, and the word
+"leaderboard" now appears nowhere in either version. The report does build a
+classifier and does report its accuracy, so the claim is half contradicted by
+section 4.6. What it was reaching for is already the report's conclusion and
+is made properly in 5.1, where it is earned.
+
+### 13.6 Length
+
+Section 1 now runs to roughly four hundred words against the outline's two
+hundred and fifty. The overrun is accepted. The outline says the budgets are
+guides and the argument matters more, and this is the only section of the
+report in which the author appears. Nothing else in the outline moves.
+
+### 13.7 Regenerated - 2026-09-25
+
+Both versions rebuilt from 13.4 and 13.5. Section 1 is now four paragraphs:
+the employer sentence, the narrative, the constraint chain, and the cited
+background, which is unchanged.
+
+Independently re-verified against the rebuild, reading the tracked PDF itself
+rather than the Word source: 20 pages, 294 numeric tokens, none without an
+entry on this sheet; the narrative of 13.4 and the constraint chain of 13.5
+present verbatim; and none of `sensor signals`, `leaderboard`, the review
+notes or any reference to this sheet surviving into either document.
+
+| check | result |
+|---|---|
+| Figures matching `figures/` byte for byte | **15 of 15**, both versions |
+| Figure 1 is the corrected file | **yes**; no 192504-byte blob in either |
+| Stray markdown in rendered text | none - 0 backticks, 1 asterisk, the intended `figXXy_*.png` wildcard |
+| The retired "sensor signals" sentence | **absent from both** |
+| The word leaderboard / 排行榜 | **absent from both** |
+| Review notes | absent from both |
+| Pages | Chinese 21, English 20 |
+
+Files: `轴承故障诊断报告_中文终版.docx` / `.pdf`,
+`Bearing_fault_diagnosis_Chengzhe_KONG.docx` / `.pdf`.
+
+The English PDF tracked in the repository is replaced by this build. The
+numeric-traceability audit in section 12 is unaffected: section 1 carries no
+numbers other than the internship dates, which come from 10.2.
