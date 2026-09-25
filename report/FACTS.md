@@ -1172,3 +1172,55 @@ distinguish which was read.
 | 4.6 | same assembly explanation |
 | 5.2, Limitations | the ball fault: Table 5 empty, Table 6 lists 119, the method declined on 119 |
 | new, or in 4 | the 36-record cross-check as a validation of the pipeline |
+
+---
+
+## 12. Final audit, 2026-09-25
+
+Both submission versions were checked against this sheet and against the
+repository. Recorded so that a later regeneration can be held to the same bar.
+
+Files: `Bearing_fault_diagnosis_Chengzhe_KONG.docx` / `.pdf` and
+`轴承故障诊断报告_中文终版.docx` / `.pdf`.
+
+| check | result |
+|---|---|
+| Numeric tokens traceable to this sheet | **294 of 294**, both versions |
+| Numbers present in one version only | **none**, in either direction |
+| Figures matching `figures/` byte for byte | **15 of 15**, both versions |
+| Figure 1 is the corrected file | **yes**, both versions |
+| Tables | 15 in each, one-to-one |
+| Internal scaffolding remaining | none - no review notes, no references to this sheet, no requests for confirmation |
+
+Both documents end at the references.
+
+### What was fixed between the reviewed drafts and these
+
+- The Chinese version had embedded the pre-fix `fig01_waveforms.png`, showing
+  0.02 s beneath a caption claiming 0.2 s and about 21 bursts. Replaced.
+- The Chinese version had named the employer from a registry lookup rather
+  than the certificate. Corrected to 武汉京天电器有限公司, with the robotics
+  brand following to explain the role.
+- The English version claimed the sideband measurements were "the opposite in
+  both cases". They are not of the same kind, and both versions now state the
+  two separately.
+- Which records the benchmark's p. 110 sentence covers is now written as an
+  identification made here, not as something the paper printed.
+- Figure 11's caption called the non-blind reference "the cheating upper
+  bound", a term used once and never defined. Both versions now use the name
+  the text uses.
+
+### Still open, and not blocking
+
+- **Page count of the English version has not been measured.** Neither file
+  records a page count in its properties. The Chinese version is 22 pages;
+  English typesetting of the same content will differ. Worth opening and
+  checking before submission, not because a number must be hit but because
+  the author should know it.
+- **The benchmark paper's prose is still transcription, not copy-paste.** The
+  citation rule in Appendix D holds: paraphrase with a page number, nothing
+  inside quotation marks. Section 11.1 says what would license changing that.
+- **The registered English name of 武汉京天电器有限公司 has not been
+  verified to exist.** The English version renders it as Wuhan Jingtian
+  Electric Co., Ltd. and prints the Chinese characters beside it, so a
+  reviewer can match the seal regardless.
